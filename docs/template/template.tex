@@ -1,0 +1,30 @@
+%!TEX program=xelatex
+\documentclass[final]{report} %scrreprt of scrartcl
+\input{../.library/preamble.tex}
+\input{../.library/style.tex}
+\addbibresource{../.library/bibliography.bib}
+
+\title{Template}
+%\author{Someone} %hardcoded
+\newcommand{\thesubtitle}{Template Report}
+\author{~}
+\date{\today}
+
+\begin{document}
+\pagenumbering{roman}
+
+%----intro
+\subimport{../.library/}{title.tex}
+\newpage
+\tableofcontents
+
+\newpage
+\pagenumbering{arabic}
+\subimport{introduction/}{introduction.tex}
+\subimport{conclusions/}{conclusions.tex}
+\newpage
+\pagenumbering{Roman}
+
+\printbibliography
+\subimport{appendices/}{appendices.tex}
+\end{document}

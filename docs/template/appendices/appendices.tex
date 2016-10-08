@@ -1,0 +1,18 @@
+%!TEX program = xelatex
+\documentclass[final]{scrreprt} %scrreprt of scrartcl
+\input{../../.library/preamble.tex}
+\input{../../.library/style.tex}
+\addbibresource{../../.library/bibliography.bib}
+\begin{document}
+\begin{appendices}
+\renewcommand{\chapternumber}{\appendixname\space\thechapter} 
+\chapter{Test}
+\label{app:test}
+%\includecode[matlab]{matched-filter.m}{resources/matlab/matched-filter.m}{matched-filter.m}
+
+%\chapter{Source}
+%\label{app:source}
+%\subimport{}{sourcecode.tex}
+
+\end{appendices}
+\end{document}

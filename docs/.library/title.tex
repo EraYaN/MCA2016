@@ -1,0 +1,87 @@
+%!TEX program=xelatex
+\documentclass[final]{report}
+\input{preamble.tex}
+\input{style.tex}
+
+\title{Template Title}
+\newcommand{\thesubtitle}{Template Subtitle}
+\author{Template {Author}}
+\date{\today}
+\begin{document}
+\newgeometry{margin=2.5cm}
+\begin{titlingpage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+ 
+\begin{figure}
+\includegraphics[width=4cm]{resources/TU_Delft_logo_RGB.eps}
+\end{figure}
+\textsc{\Large ET4047 Modern Computer Architectures}\\[0.5cm] % Minor heading such as course name
+\textsc{\huge ρ-VEX device optimization}\\[0.5cm] % Major heading such as course title
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\coordinate [below=9.5cm] (midpoint) at (current page.north);
+
+\node [name=colourbar,
+anchor = base,
+fill = accent1,
+text = white,
+minimum width = \paperwidth,
+minimum height = 2cm] at (midpoint) {\Huge \bfseries \thetitle};
+\node [name=barbottom,
+anchor = base,
+fill = accent2,
+minimum width = \paperwidth,
+minimum height = 0.05cm] at (colourbar.south) {};
+\end{tikzpicture}
+\\[2.5cm]
+{\Large \thesubtitle}\\[1cm]
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{minipage}{0.45\textwidth}
+\begin{flushleft} \large
+\emph{Project Members:}\\
+\begin{tabular}{ll}
+Erwin R. \textsc{de Haan} & 4222814\\
+Lars T. J. \textsc{van Leeuwen} & 4239784\\
+Alex S. J. \textsc{Misdorp} & 4240561\\
+\end{tabular}
+\end{flushleft}
+\end{minipage}\\[1.0cm]
+%~
+% \begin{minipage}{0.45\textwidth}
+% \begin{flushright} \large
+% \emph{Project Supervisiors:} \\
+% \begin{tabular}{r}
+% dr.ir. J.J.A. \textsc{Keiren}
+% \end{tabular}
+% \end{flushright}
+% \end{minipage}
+
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+{\large \theauthor}\\ [1.0cm] 
+
+{\large \thedate}\\ [1.0cm]
+% \vspace{-1cm}
+%     \begin{figure}[H]
+%         \centering
+%         \includegraphics[width=0.9\textwidth]{resources/titlepageimage.png}
+%     \end{figure}
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlingpage}
+\restoregeometry
+\end{document}
