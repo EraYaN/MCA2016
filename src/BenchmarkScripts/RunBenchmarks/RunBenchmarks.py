@@ -73,7 +73,7 @@ def RunBenchmark(main_dir, configurations,benchmarks,flag_sets):
                     print(result.stderr)
                     break
                 print("Parsing PCNTL summary...")
-                with open("{0}/configurations/{1}/output-{2}.c/{2}.s".format(main_dir,configuration,benchmark), 'w') as pcntl_log:
+                with open("{0}/configurations/{1}/output-{2}.c/{2}.s.stats".format(main_dir,configuration,benchmark), 'w') as pcntl_log:
                     pcntl_log.write(result.stdout);
                     print("Written PCNTL summary.")
 
@@ -96,7 +96,7 @@ if __name__ == '__main__':
 
         benchmarks = ['engine','fir']
         configurations = ['example-2-issue']
-        flag_sets = ['-O3']
+        flag_sets = ['-O4 -autoinline -prefetch -d -fexpand-div -fno-xnop']
 
         ## Task 1
         RunBenchmark(main_dir, configurations, benchmarks, flag_sets)
