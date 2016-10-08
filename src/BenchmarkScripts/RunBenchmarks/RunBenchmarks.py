@@ -70,7 +70,7 @@ if __name__ == '__main__':
     #parser.add_argument('--disable-bench', action="store_true", help='Disable the benchmarks')
     #parser.add_argument('--disable-plot', action="store_true", help='Disable the plotting')
     #TODO report making
-    parser.add_argument('--output-dir', action="store", help='Output directory',default="~/workspace/assignment1")
+    parser.add_argument('--main-dir', action="store", help='Main working directory',default="~/workspace/assignment1")
     #parser.add_argument('--output-dir', action="store", help='Output directory',default=".")
     try:
         opts = parser.parse_args(sys.argv[1:])        
