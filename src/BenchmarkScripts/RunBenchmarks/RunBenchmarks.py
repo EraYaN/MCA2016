@@ -1,9 +1,9 @@
 import subprocess
 import re
+import argparse as ap
+import sys
 
-main_dir = '~/workspace/assignment1/'
-
-def RunBenchmark(configurations,benchmarks,flag_sets):
+def RunBenchmark(main_dir, configurations,benchmarks,flag_sets):
     for configuration in configurations:
         for benchmark in benchmarks:
             for flag_set in flag_sets:
@@ -70,18 +70,19 @@ if __name__ == '__main__':
     #parser.add_argument('--disable-bench', action="store_true", help='Disable the benchmarks')
     #parser.add_argument('--disable-plot', action="store_true", help='Disable the plotting')
     #TODO report making
-    #parser.add_argument('--output-dir', action="store", help='Output directory',default="../../../docs/lab2")
+    parser.add_argument('--output-dir', action="store", help='Output directory',default="~/workspace/assignment1")
     #parser.add_argument('--output-dir', action="store", help='Output directory',default=".")
     try:
-        opts = parser.parse_args(sys.argv[1:])
-        output_dir_root = opts.output_dir;
+        opts = parser.parse_args(sys.argv[1:])        
+
+        main_dir = opts.main_dir
 
         benchmarks = ['engine','fir']
         configurations = ['example-2-issue']
         flag_sets = ['-O3']
 
         ## Task 1
-        RunBenchmark(configurations, benchmarks, flag_sets)
+        RunBenchmark(main_dir, configurations, benchmarks, flag_sets)
 
         print("Done.")
     except SystemExit:
