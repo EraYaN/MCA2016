@@ -96,7 +96,7 @@ if __name__ == '__main__':
 
         benchmarks = ['engine','fir']
         configurations = ['example-2-issue']
-        flag_sets = ['-O4 -autoinline -prefetch -d -fexpand-div -fno-xnop']
+        flag_sets = ['-O4 -autoinline -prefetch -d -fexpand-div']
 
         ## Task 1
         RunBenchmark(main_dir, configurations, benchmarks, flag_sets)
