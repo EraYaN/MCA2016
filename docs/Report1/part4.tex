@@ -1,4 +1,5 @@
 \section{Environment}
+\label{ch:environment}
 The configuration for this processor is mainly for applications where power consumption is less important that raw performance.
 Think bigger embedded systems (in vehicles for example) or desktops.
 Especially fir which can be used for filtering applications.
@@ -11,3 +12,6 @@ The best performance was achieved using a single relatively big single cluster t
 That especially in for example automotive can be crucial to bring latencies down and safety up.
 
 \section{Conclusion}
+A configuration for a processor was developed that not only significantly improves the performance of both benchmarks but also manages to stay relatively small. For engine the amount of execution cycles was brought down from 724703 to 521269 and fir from 509595 down to 472448. Improvements of respectively 29.7\% and 9.4\%. The improvement is significantly better for engine. Attempts at finding a configuration that had as shocking an improvement for fir as for engine were unsuccessful, though not for lack of trying. Of course, not every program leaves a lot of room for improvement. Some processes are inherently more sequential and therefore hard to improve by doing more work at the same time.
+
+It should be noted that in the developing of this configuration a lot of priority was given to keeping the processor somewhat small and efficient. Possibly more so than was necessary for the environment laid out in \cref{ch:environment}. A slightly bigger performance improvement was still a possibility. Using an issue width of 8 with 6 ALU's and 4 multiply blocks yielded execution cycles of 517629 and 471082 for respectively engine and fir for example. Despite that, it was decided that the improvements weren't big enough to warrant an upgrade in size, cost and power consumption.
