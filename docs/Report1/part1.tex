@@ -12,15 +12,15 @@ The fir benchmark is concerned with the application of a fir filter. As revealed
 
 \begin{figure}[ht!]
     %\centering
-    \hspace*{-3.5cm}
-    \begin{subfigure}{.65\textwidth}
-    \includegraphics[scale = 0.75]{images/Engine-rgg.png}
+\begin{subfigure}[b]{.495\textwidth}
+    \includegraphics[width=\linewidth]{images/Engine-rgg.png}
     \subcaption{Engine: The call graph for the engine benchmark reveals that the benchmark performs a lot of divide operations (\_i\_div and \_i\_udiv).}
     \label{fig:engine_call_graph}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+\quad
+\begin{subfigure}[b]{.495\textwidth}
   %\centering
-      \includegraphics[scale = 0.8]{images/FIR-rgg3.png}
+      \includegraphics[width=\linewidth]{images/FIR-rgg3.png}
       \centering
     \subcaption{fir: The call graph for the fir benchmark reveals that the benchmark performs quite some divide operations (\_i\_udiv). Furthermore the add and subtraction operations, and the rounAndPackFloat are prominent.  Note that part of the graph is cut but that the nodes aren't relevant for show case of execution time as the relative execution time of those nodes (s) is zero.}
     \label{fig:fir_call_graph}
