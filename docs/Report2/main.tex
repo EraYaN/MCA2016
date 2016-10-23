@@ -1,0 +1,57 @@
+%!TEX program=pdflatex
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{cleveref}
+\begin{document}
+
+
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
+\center
+
+%	HEADING SECTIONS
+\textsc{\LARGE Delft University of Technology}\\[1.5cm]
+\textsc{\large Modern Computer Architectures}\\[0.5cm] 
+\textsc{\large ET4074}\\[0.5cm]
+
+%	TITLE SECTION
+\HRule \\[0.5cm]
+{ \huge \bfseries Lab 2}\\[0.4cm]
+{ \Large \itshape \bfseries SoC design with $\rho$-VEX processors\\ Group 03} \\ [0.3cm]
+\HRule \\[1.5cm]
+
+%   AUTHOR SECTION
+\Large \emph{Authors:}\\
+Alexander Misdorp (4240561) \\
+Erwin de Haan (4222814)\\
+Lars van Leeuwen (4239784)\\[2.8cm]
+
+%	DATE SECTION
+{\large \today}\\[2cm]
+
+%	LOGO SECTION
+\includegraphics[scale=0.27]{images/TU_Delft_logo_RGB.png}\\%[1cm]
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+
+% Zie je eigen part file 
+\input{introduction.tex}
+\input{benchmarks.tex}
+\input{designs.tex}
+\input{conclusion.tex}
+\input{reflection.tex}
+
+
+%\bibliographystyle{plain}
+%\bibliography{references}
+\end{document}
