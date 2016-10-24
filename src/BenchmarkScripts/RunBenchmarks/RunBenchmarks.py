@@ -105,10 +105,10 @@ if __name__ == '__main__':
 
         benchmarks = ['engine','fir','adpcm','pocsag']
         configurations = ['assignment2']
-        flag_sets = {'engine':['-O4 -autoinline -d -fexpand-div'],
-                     'fir':['-O4 -autoinline -d -fexpand-div'],
-                     'adpcm':['-O4 -autoinline -d -fexpand-div'],
-                     'pocsag':['-O4 -autoinline -d -fexpand-div']}
+        flag_sets = {'engine':['-O4 -autoinline -d -fexpand-div -fdag-file=trace1 -fdraw-dag=1'],
+                     'fir':['-O4 -autoinline -d -fexpand-div -fdag-file=trace1 -fdraw-dag=1'],
+                     'adpcm':['-O4 -autoinline -d -fdag-file=trace1 -fdraw-dag=1'],
+                     'pocsag':['-O4 -autoinline -d -fdag-file=trace1 -fdraw-dag=1']}
 
         ## Task 1
         RunBenchmark(main_dir, configurations, benchmarks, flag_sets)
