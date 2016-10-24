@@ -11,7 +11,7 @@ EXIT_BADARGUMENT = 2
 def RunBenchmark(main_dir, configurations,benchmarks,flag_sets):
     for configuration in configurations:
         for benchmark in benchmarks:
-            for flag_set in flag_sets:
+            for flag_set in flag_sets[benchmark]:
                 # Metrics
                 cycles = 0;
 
@@ -40,12 +40,21 @@ def RunBenchmark(main_dir, configurations,benchmarks,flag_sets):
                 #Process Output
                 print('Parsing TA log...')
                 cycles = -1
+                nops = -1
                 pattern = "Execution Cycles:\s*([0-9]+)\s*\(.*\)".format(benchmark)
                 with open("{0}/configurations/{1}/output-{2}.c/ta.log.000".format(main_dir,configuration,benchmark), 'r') as ta_log:
                     for line in ta_log:
                         matchobj = re.match(pattern,line)
                         if matchobj:
                             cycles = matchobj.group(0)
+                            break;
+
+                pattern = "Nops:\s*([0-9]+)\s*\(.*\)".format(benchmark)
+                with open("{0}/configurations/{1}/output-{2}.c/ta.log.000".format(main_dir,configuration,benchmark), 'r') as ta_log:
+                    for line in ta_log:
+                        matchobj = re.match(pattern,line)
+                        if matchobj:
+                            nops = matchobj.group(0)
                             break;
 
                 print("Running GPROF...")
@@ -78,7 +87,7 @@ def RunBenchmark(main_dir, configurations,benchmarks,flag_sets):
                     print("Written PCNTL summary.")
 
 
-                print("Benchmark metrics:\nExecution cycles: {0}".format(cycles));
+                print("Benchmark metrics:\n{0}\n{1}".format(cycles,nops));
                          
 
 
@@ -96,7 +105,10 @@ if __name__ == '__main__':
 
         benchmarks = ['engine','fir','adpcm','pocsag']
         configurations = ['assignment2']
-        flag_sets = ['-O4 -autoinline -prefetch -d -fexpand-div']
+        flag_sets = {'engine':['-O4 -autoinline -d -fexpand-div'],
+                     'fir':['-O4 -autoinline -d -fexpand-div'],
+                     'adpcm':['-O4 -autoinline -d -fexpand-div'],
+                     'pocsag':['-O4 -autoinline -d -fexpand-div']}
 
         ## Task 1
         RunBenchmark(main_dir, configurations, benchmarks, flag_sets)
