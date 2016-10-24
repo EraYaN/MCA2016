@@ -94,8 +94,8 @@ if __name__ == '__main__':
 
         main_dir = opts.main_dir
 
-        benchmarks = ['engine','fir']
-        configurations = ['example-2-issue']
+        benchmarks = ['engine','fir','adpcm','pocsag']
+        configurations = ['assignment2']
         flag_sets = ['-O4 -autoinline -prefetch -d -fexpand-div']
 
         ## Task 1
