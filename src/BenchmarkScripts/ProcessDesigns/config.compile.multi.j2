@@ -1,0 +1,28 @@
+
+# This file specifies which non-library sources to compile for which
+# core/context, and using which compiler flags.
+
+{% for context in contexts %}
+#------------------------------------------------------------------------------
+[core0.{{context}}] # Configuration for core 0., hardware context {{context}}
+#------------------------------------------------------------------------------
+
+# Compile the entry point file.
+main-core0-ctxt{{context}}           {{main_flags}}
+
+{% if context is sameas 0 %}
+# Compile the benchmarks. The -sub parts tell the compiler to add the
+# benchmark name as a prefix to all global functions and variables, in order
+# to make them unique. For instance, the int main(void) function in the
+# engine.c file can be called using engine_main().
+engine-sub                {{flag_sets['engine']}}
+fir-sub                   {{flag_sets['fir']}}
+adpcm-sub                 {{flag_sets['adpcm']}}
+pocsag-sub                {{flag_sets['pocsag']}}
+{% endif %}
+
+# Compile the library sources (floating point functions, debugging, etc.) with
+# -O3 to optimize them.
+OTHERS                     {{lib_flags}}
+
+{% endfor %}
