@@ -270,8 +270,9 @@ def RunDesign(run):
         run['results'] = results
         return run
     except:
-        ParPrint("Unexpected error: {0}".format(sys.exc_info()[0]))
-        ParPrint(sys.exc_info())
+        ParPrint("{1} > Unexpected error: {0}".format(sys.exc_info()[0],design_num))
+        ParPrint(sys.exc_info()[1])
+        ParPrint(sys.exc_info()[2])
         raise
 
 
