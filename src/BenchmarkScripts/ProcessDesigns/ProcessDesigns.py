@@ -67,8 +67,6 @@ def execute(command,cwd,logfile=None,design_num=0):
         if nextline == '' and process.poll() is not None:
             break
         if not nextline == '':
-
-
             sys.stdout.write("{0} > ".format(design_num))
             if 'license' in nextline:
                 sys.stdout.write(C_YELLOW + nextline)
@@ -264,6 +262,8 @@ def RunDesign(run):
             t1 = time.time()
             results['Synthesize'] = Synthesize(main_dir,design_filename,design_num)
             results['SynthesizeTime'] = time.time() - t1
+            parsedArea = ParseAreaTxt(main_dir,design_filename,design_num)
+            results['SynthesizeArea'] = GetAreaNumber(parsedArea);
 
         if opts.boardserver_run:
             t1 = time.time()
@@ -280,6 +280,31 @@ def RunDesign(run):
         ParPrint(traceback.format_exc())
         raise
 
+def ParseAreaTxt(main_dir, design, design_num=0):
+    pattern = '\s*Number of\s*([a-zA-Z0-9/ ]+):\s*([0-9,]+)\s*out of'
+    comp_patt = re.compile(pattern);
+    parsed = {}
+    config_dir_result = os.path.join(main_dir,design,'results')
+    with open(os.path.join(config_dir_result,'area.txt'),'r') as area_file:
+        for line in area_file:
+            match = comp_patt.search(line)
+            if match: 
+                parsed[match.group(1)] = match.group(2).replace(',','')  
+                
+                
+def ParseAreaTxt(main_dir, design, design_num=0):
+    pattern = '\s*Number of\s*([a-zA-Z0-9/ ]+):\s*([0-9,]+)\s*out of'
+    comp_patt = re.compile(pattern);
+    parsed = {}
+    config_dir_result = os.path.join(main_dir,design,'results')
+    with open(os.path.join(config_dir_result,'area.txt'),'r') as area_file:
+        for line in area_file:
+            match = comp_patt.search(line)
+            if match: 
+                parsed[match.group(1)] = match.group(2).replace(',','')    
+                
+def GetAreaNumber(parsed):
+    return parsed['Slice Registers']*1+parsed['Slice LUTs']*1+parsed['RAMB36E1/FIFO36E1s']*3600+parsed['RAMB18E1/FIFO18E1s']*1800+parsed['DSP48E1s']*1200;
 
 def RunDesignResult(run):
     results_lock.acquire()
