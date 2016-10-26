@@ -269,6 +269,7 @@ def RunDesignResult(run):
         results_lock.release()
 
 if __name__ == '__main__':
+    t_launch = time.time()
     parser = ap.ArgumentParser(prog='MCARunBenchmarks',description='MCA Benchmark Runner Script')
     parser.add_argument('--setup-designs', action="store_true", help='Setup all designs')
     parser.add_argument('--clean-designs', action="store_true", help='Clean all designs')
@@ -323,8 +324,8 @@ if __name__ == '__main__':
 
         PrintResults(designs,main_results)
 
+        
 
-
-        print("Done.")
+        print("Done. Run time is: {0} minutes".format((time.time() - t_launch)/60))
     except SystemExit:
         print('Bad Arguments')
