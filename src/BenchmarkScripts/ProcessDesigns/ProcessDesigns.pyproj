@@ -26,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.compile.j2" />
+    <Content Include="config.compile.multi.j2" />
     <Content Include="configuration.rvex.j2" />
   </ItemGroup>
   <PropertyGroup>
