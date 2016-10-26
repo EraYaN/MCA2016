@@ -1,0 +1,9 @@
+lane_config;stop_bit;icache_size;dcache_size
+1111;4;1k;512
+1111;4;2k;1k
+1111;4;4k;2k
+1111;4;8k;4k
+1111;4;16k;8k
+1111;4;32k;16k
+1111;4;64k;32k
+1111;4;128k;64k
