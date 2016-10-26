@@ -1,0 +1,38 @@
+// Declarations for the benchmark main() functions.
+#include "benchmarks.h"
+
+// If you want, you can use the struct defined in this file for inter-core
+// communication through memory. You should not need this unless you are doing
+// really fancy things though.
+#include "intercore.h"
+
+// Debug output functions (puts, etc.; NO printf).
+#include <record.h>
+
+// Core control register definitions.
+#include <rvex.h>
+
+#include "reconfigure.h"
+
+// This variable is used by the debug message recorder. It must be initialized
+// to 0x3F000000 + global_context_index * 0x100000.
+volatile char *record_ptr = (volatile char *){{record_ptr}};
+
+int main(void) {
+    
+    // Log the performance counters for debugging purposes. This times the C
+    // runtime initialization code. Note that the logging takes time as well;
+    // you might want to remove them for your final measurements. The server
+    // and simulation will always give you a total cycle count.
+    log_perfcount("init");
+    
+    {% for benchmark in benchmarks %}
+	// Run the {{benchmark}} benchmark and log performance.
+    {{benchmark}}_main();
+    log_perfcount("{{benchmark}}");
+	{% if benchmark_data[benchmark]['reconfigure_on_finish'] is not sameas False %}
+	reconfigure(benchmark_data[benchmark]['reconfigure_on_finish'])
+	{% endif %}
+	{% endfor %}
+    
+}

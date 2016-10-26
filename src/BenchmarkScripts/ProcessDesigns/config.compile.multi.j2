@@ -23,6 +23,9 @@ pocsag-sub                {{flag_sets['pocsag']}}
 
 # Compile the library sources (floating point functions, debugging, etc.) with
 # -O3 to optimize them.
+
+reconfigure				   {{lib_flags}}
+
 OTHERS                     {{lib_flags}}
 
 {% endfor %}

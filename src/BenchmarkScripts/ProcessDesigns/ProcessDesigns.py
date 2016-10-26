@@ -70,7 +70,7 @@ def execute(command,cwd,logfile=None,design_num=0):
 
             sys.stdout.write("{0} > ".format(design_num))
             if 'license' in nextline:
-                sys.stdout.write(C_YELLOW+nextline)
+                sys.stdout.write(C_YELLOW + nextline)
             else:
                 sys.stdout.write(nextline)
             if file_stdout:
@@ -109,10 +109,8 @@ def MakeConfigurationRVEX(main_dir, design, data, design_num=0):
         file.write(configfile)
         return True
 
-def MakeConfigCompile(main_dir, design, data, contexts=1, design_num=0):
-    template_file = 'config.compile.multi.j2'
-    if contexts == 1:
-        template_file = 'config.compile.j2'
+def MakeConfigCompile(main_dir, design, data, benchmark_data, contexts=1, design_num=0):
+    template_file = 'config.compile.multi.j2'   
     ParPrint(C_CYAN + '{2} > Making src/config.compile from {1} for {0}'.format(design,template_file,design_num))
     template = jinja_env.get_template(template_file)
 
@@ -122,7 +120,33 @@ def MakeConfigCompile(main_dir, design, data, contexts=1, design_num=0):
         os.makedirs(config_dir_src)
     with open(os.path.join(config_dir_src,'config.compile'),'w') as file:
         file.write(configfile)
-        return True
+    
+    shutil.copy('reconfigure.h',os.path.join(main_dir,design,'src','reconfigure.h'))
+    shutil.copy('reconfigure.c',os.path.join(main_dir,design,'src','reconfigure.c'))
+    
+    base_address = 0x3F000000
+    context_offset = 0x100000
+
+    context_benches = benchmark_data['contexts'] 
+
+    # Collapse all into first context if there are too many contexts defined
+    if len(benchmark_data['contexts']) >= contexts:
+        tmp = []
+        for c in context_benches:
+            for bench in c:
+                tmp.append(bench)
+
+        context_benches = [] 
+        context_benches.append(tmp)     
+
+    for context in range(0,contexts):
+        template = jinja_env.get_template('main-core.c.j2')
+        maincore_file = template.render(record_ptr="0x{0:02X}".format(base_address + context + context_offset),benchmarks=context_benches[context],benchmark_data=benchmark_data['benchmarks'])
+        with open(os.path.join(config_dir_src,'main-core0-ctxt{0}.c'.format(context)),'w') as file:
+            file.write(configfile)
+
+
+    return True
 
 def Clean(main_dir, design, design_num=0):
     ParPrint(C_CYAN + '{1} > Clean {0}'.format(design,design_num))
@@ -213,7 +237,7 @@ def RunDesign(run):
         if opts.clean_designs:
             results['Clean'] = Clean(main_dir,design_filename)
         if opts.setup_designs:
-            results['MakeConfigurationRVEX'] = MakeConfigurationRVEX(main_dir,design_filename,row,design_num)
+            results['MakeConfigurationRVEX'] = MakeConfigurationRVEX(main_dir,design_filename,row,run['benchmarks'],design_num)
             results['Configure'] = Configure(main_dir,design_filename,design_num)
             flags = {'main_flags': main_flags,
             'lib_flags': lib_flags,
@@ -287,7 +311,31 @@ if __name__ == '__main__':
         main_dir = os.path.abspath(opts.main_dir)
         designs_file = opts.designs_file
 
-        benchmarks = ['engine','fir','adpcm','pocsag']
+        
+        benchmarks = {
+            'contexts':[
+                ['engine','fir'],
+                ['adpcm','pocsag']                
+            ],
+            'benchmarks':{
+                'engine':{
+                    'reconfigure_on_finish':False
+                    
+                },
+            'fir':{
+                    'reconfigure_on_finish':False
+                    
+                },
+            'adpcm':{
+                    'reconfigure_on_finish':False
+                    
+                },
+                'pocsag':{
+                    'reconfigure_on_finish':'0x0'
+                    
+                }            
+            }
+        }
         configurations = ['assignment2']
         main_flags = '-O4'
         lib_flags = '-O4'
@@ -312,7 +360,7 @@ if __name__ == '__main__':
             for row in reader:
                 designs.append(GetDesignName(row))
                 #parr_data.append({'row':row,'design_num':design_num})
-                p.apply_async(RunDesign, args = ({'row':row,'design_num':design_num},), callback = RunDesignResult)
+                p.apply_async(RunDesign, args = ({'row':row,'design_num':design_num,'benchmarks':benchmarks},), callback = RunDesignResult)
                 design_num += 1
 
             p.close()
@@ -326,6 +374,6 @@ if __name__ == '__main__':
 
         
 
-        print("Done. Run time is: {0} minutes".format((time.time() - t_launch)/60))
+        print("Done. Run time is: {0} minutes".format((time.time() - t_launch) / 60))
     except SystemExit:
         print('Bad Arguments')
