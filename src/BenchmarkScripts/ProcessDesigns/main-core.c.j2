@@ -31,7 +31,7 @@ int main(void) {
     {{benchmark}}_main();
     log_perfcount("{{benchmark}}");
 	{% if benchmark_data[benchmark]['reconfigure_on_finish'] is not sameas False %}
-	reconfigure(benchmark_data[benchmark]['reconfigure_on_finish'])
+	reconfigure({{benchmark_data[benchmark]['reconfigure_on_finish']}});
 	{% endif %}
 	{% endfor %}
     

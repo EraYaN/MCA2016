@@ -10,15 +10,18 @@ int reconfigure(unsigned int newConfiguration) {
 	int ourselves = CR_CID;
 	// Used to store the ID of the winning context after the request.
 	int winner;
+    
+    int gsr;
+    
 	// Retry requesting the new configuration until we win arbitration.
 	do {
 		// Request the new configuration.
-		CR_CRR = newConfiguration.
-			// Load the GSR register for state information.
-			gsr = CR_GSR;
+		CR_CRR = newConfiguration;
+        // Load the GSR register for state information.
+        gsr = CR_GSR;
 		// Extract the reconfiguration requester ID field from GSR.
 
-		int winner = (gsr & CR_GSR_RID_MASK) >> CR_GSR_RID_BIT;
+		winner = (gsr & CR_GSR_RID_MASK) >> CR_GSR_RID_BIT;
 	} while (winner != ourselves);
 	// Busy-wait for reconfiguration to complete.
 	while (gsr & CR_GSR_B_MASK) {

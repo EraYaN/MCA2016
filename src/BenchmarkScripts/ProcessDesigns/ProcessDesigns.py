@@ -10,6 +10,7 @@ import colorama
 from terminaltables import AsciiTable
 from jinja2 import Template
 import multiprocessing as mp
+import traceback
 
 import time
 
@@ -130,7 +131,7 @@ def MakeConfigCompile(main_dir, design, data, benchmark_data, contexts=1, design
     context_benches = benchmark_data['contexts'] 
 
     # Collapse all into first context if there are too many contexts defined
-    if len(benchmark_data['contexts']) >= contexts:
+    if len(benchmark_data['contexts']) > contexts:
         tmp = []
         for c in context_benches:
             for bench in c:
@@ -138,12 +139,17 @@ def MakeConfigCompile(main_dir, design, data, benchmark_data, contexts=1, design
 
         context_benches = [] 
         context_benches.append(tmp)     
+    print(context_benches)
+    ParPrint("{0}, {1}, {2}".format(contexts,len(benchmark_data['contexts']),len(context_benches)))
+    #ParPrint(', '.join(context_benches))
 
+    template_mc = jinja_env.get_template('main-core.c.j2') 
     for context in range(0,contexts):
-        template = jinja_env.get_template('main-core.c.j2')
-        maincore_file = template.render(record_ptr="0x{0:02X}".format(base_address + context + context_offset),benchmarks=context_benches[context],benchmark_data=benchmark_data['benchmarks'])
-        with open(os.path.join(config_dir_src,'main-core0-ctxt{0}.c'.format(context)),'w') as file:
-            file.write(configfile)
+               
+        ParPrint("{0}".format(context))
+        maincore_file = template_mc.render(record_ptr="0x{0:02X}".format(base_address + context * context_offset),benchmarks=context_benches[context],benchmark_data=benchmark_data['benchmarks'])
+        with open(os.path.join(config_dir_src,'main-core0-ctxt{0}.c'.format(context)),'w') as file_mc:
+            file_mc.write(maincore_file)
 
 
     return True
@@ -237,13 +243,13 @@ def RunDesign(run):
         if opts.clean_designs:
             results['Clean'] = Clean(main_dir,design_filename)
         if opts.setup_designs:
-            results['MakeConfigurationRVEX'] = MakeConfigurationRVEX(main_dir,design_filename,row,run['benchmarks'],design_num)
+            results['MakeConfigurationRVEX'] = MakeConfigurationRVEX(main_dir,design_filename,row,design_num)
             results['Configure'] = Configure(main_dir,design_filename,design_num)
             flags = {'main_flags': main_flags,
             'lib_flags': lib_flags,
                 'flag_sets':flag_sets  }
             results['MultiContext'] = 'Yes' if contexts != 1 else 'No'
-            results['MakeConfigCompile'] = MakeConfigCompile(main_dir,design_filename,flags,contexts,design_num)
+            results['MakeConfigCompile'] = MakeConfigCompile(main_dir,design_filename,flags,run['benchmarks'],contexts,design_num)
         if opts.compile_designs:
             t1 = time.time()
             results['Compile'] = Compile(main_dir,design_filename,design_num)
@@ -271,8 +277,7 @@ def RunDesign(run):
         return run
     except:
         ParPrint("{1} > Unexpected error: {0}".format(sys.exc_info()[0],design_num))
-        ParPrint(sys.exc_info()[1])
-        ParPrint(sys.exc_info()[2])
+        ParPrint(traceback.format_exc())
         raise
 
 
