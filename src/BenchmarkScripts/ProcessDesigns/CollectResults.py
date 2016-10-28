@@ -1,16 +1,8 @@
-import subprocess
-import re
-import argparse as ap
-import sys
-import csv
-import jinja2
 import os
-import shutil
+import sys
+import argparse as ap
+import distutils.dir_util
 import colorama
-from terminaltables import AsciiTable
-from jinja2 import Template
-import multiprocessing as mp
-import traceback
 
 import time
 
@@ -21,17 +13,10 @@ C_YELLOW = colorama.Fore.YELLOW + colorama.Style.BRIGHT
 C_GREEN = colorama.Fore.GREEN + colorama.Style.BRIGHT
 C_CYAN = colorama.Fore.CYAN + colorama.Style.BRIGHT
 
-
-jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(os.path.abspath('.')))
-
 # Exit codes.  See ACSLabSharedLibrary/interactive_tools.h
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 EXIT_BADARGUMENT = 2
-
-lock = mp.Lock()
-
-results_lock = mp.Lock()
 
 def execute(command,cwd,logfile=None,design_num=0):
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=cwd, universal_newlines=True)
@@ -95,7 +80,7 @@ def GetAreaNumber(parsed):
     return 0
 
 def FindDesigns(main_dir):
-    return [x[0] for x in os.walk(main_dir)]
+    return [o for o in os.listdir(main_dir) if os.path.isdir(os.path.join(main_dir,o))]
 
 if __name__ == '__main__':
     t_launch = time.time()
@@ -111,12 +96,19 @@ if __name__ == '__main__':
         collection_dir = os.path.abspath(opts.collection_dir)
 
         designs = FindDesigns(main_dir)
-
+        
         if len(designs) == 0:
             print("No designs found.")
         else:
             if not os.path.exists(collection_dir):
                 os.makedirs(collection_dir)
+            
+            for design in designs:
+                if os.listdir(os.path.join(main_dir,design,'results')):
+                    print(C_GREEN+"Copying results for design {0}".format(design))
+                    distutils.dir_util.copy_tree(os.path.join(main_dir,design,'results'),os.path.join(collection_dir,design))
+                else:
+                    print(C_RED+"No results found for design {0}".format(design))
 
 
         print("Done. Run time is: {0} seconds".format((time.time() - t_launch)))
