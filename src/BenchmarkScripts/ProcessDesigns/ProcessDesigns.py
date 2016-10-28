@@ -109,7 +109,7 @@ def MakeConfigurationRVEX(main_dir, design, data, design_num=0):
         return True
 
 def MakeConfigCompile(main_dir, design, data, benchmark_data, contexts=1, design_num=0):
-    template_file = 'config.compile.multi.j2'   
+    template_file = 'config.compile.multi.j2'
     ParPrint(C_CYAN + '{2} > Making src/config.compile from {1} for {0}'.format(design,template_file,design_num))
     template = jinja_env.get_template(template_file)
 
@@ -119,14 +119,14 @@ def MakeConfigCompile(main_dir, design, data, benchmark_data, contexts=1, design
         os.makedirs(config_dir_src)
     with open(os.path.join(config_dir_src,'config.compile'),'w') as file:
         file.write(configfile)
-    
+
     shutil.copy('reconfigure.h',os.path.join(main_dir,design,'src','reconfigure.h'))
     shutil.copy('reconfigure.c',os.path.join(main_dir,design,'src','reconfigure.c'))
-    
+
     base_address = 0x3F000000
     context_offset = 0x100000
 
-    context_benches = benchmark_data['contexts'] 
+    context_benches = benchmark_data['contexts']
 
     # Collapse all into first context if there are too many contexts defined
     if len(benchmark_data['contexts']) > contexts:
@@ -135,21 +135,18 @@ def MakeConfigCompile(main_dir, design, data, benchmark_data, contexts=1, design
             for bench in c:
                 tmp.append(bench)
 
-        context_benches = [] 
-        context_benches.append(tmp)     
+        context_benches = []
+        context_benches.append(tmp)
     print(context_benches)
     ParPrint("{0}, {1}, {2}".format(contexts,len(benchmark_data['contexts']),len(context_benches)))
-    #ParPrint(', '.join(context_benches))
 
-    template_mc = jinja_env.get_template('main-core.c.j2') 
+    template_mc = jinja_env.get_template('main-core.c.j2')
     for context in range(0,contexts):
-               
+
         ParPrint("{0}".format(context))
         maincore_file = template_mc.render(record_ptr="0x{0:02X}".format(base_address + context * context_offset),benchmarks=context_benches[context],benchmark_data=benchmark_data['benchmarks'])
         with open(os.path.join(config_dir_src,'main-core0-ctxt{0}.c'.format(context)),'w') as file_mc:
             file_mc.write(maincore_file)
-
-
     return True
 
 def Clean(main_dir, design, design_num=0):
@@ -167,9 +164,6 @@ def Configure(main_dir, design, design_num=0):
         ParPrint(C_RED + "ERROR configure returned {0}.\n".format(result))
         error_occured = True
         return False
-    #with open(os.path.join(main_dir,design,'configure.log'), 'w') as log:
-    #    log.write(result.stdout);
-     #   ParPrint("Written configure log.")
     return True
 
 def Compile(main_dir, design, design_num=0):
@@ -180,9 +174,6 @@ def Compile(main_dir, design, design_num=0):
         ParPrint(C_RED + "ERROR make compile returned {0}.\n".format(result))
         error_occured = True
         return False
-    #with open(os.path.join(main_dir,design,'compile.log'), 'w') as log:
-     #   log.write(result.stdout);
-    #    ParPrint("Written compile log.")
     return True
 
 def Synthesize(main_dir, design, design_num=0):
@@ -193,9 +184,6 @@ def Synthesize(main_dir, design, design_num=0):
         ParPrint(C_RED + "ERROR make synth returned {0}.\n".format(result))
         error_occured = True
         return False
-   # with open(os.path.join(main_dir,design,'synth.log'), 'w') as log:
-   #     log.write(result.stdout);
-   #     ParPrint("Written synth log.")
     return True
 
 def Simulate(main_dir, design, design_num=0):
@@ -206,9 +194,6 @@ def Simulate(main_dir, design, design_num=0):
         ParPrint(C_RED + "ERROR make sim returned {0}.\n".format(result))
         error_occured = True
         return False
-   # with open(os.path.join(main_dir,design,'sim.log'), 'w') as log:
-    #    log.write(result.stdout);
-    #    ParPrint("Written sim log.")
     return True
 
 def Run(main_dir, design, design_num=0):
@@ -219,9 +204,6 @@ def Run(main_dir, design, design_num=0):
         ParPrint(C_RED + "ERROR make run returned {0}.\n".format(result))
         error_occured = True
         return False
-   # with open(os.path.join(main_dir,design,'run.log'), 'w') as log:
-    #    log.write(result.stdout);
-    #    ParPrint("Written run log.")
     return True
 
 
@@ -263,14 +245,12 @@ def RunDesign(run):
             t1 = time.time()
             results['Synthesize'] = Synthesize(main_dir,design_filename,design_num)
             results['SynthesizeTime'] = time.time() - t1
-            parsedArea = ParseAreaTxt(main_dir,design_filename,design_num)
-            results['SynthesizeArea'] = GetAreaNumber(parsedArea);
 
         if opts.boardserver_run:
             t1 = time.time()
             results['Run'] = Run(main_dir,design_filename,design_num)
             results['RunTime'] = time.time() - t1
-            
+
         if opts.collect_results:
             t1 = time.time()
             results['CollectResults'] = CollectResults(main_dir,design_filename,design_num)
@@ -285,28 +265,6 @@ def RunDesign(run):
         ParPrint("{1} > Unexpected error: {0}".format(sys.exc_info()[0],design_num))
         ParPrint(traceback.format_exc())
         raise
-
-def ParseAreaTxt(main_dir, design, design_num=0):
-    pattern = '\s*Number of\s*([a-zA-Z0-9/ ]+):\s*([0-9,]+)\s*out of'
-    comp_patt = re.compile(pattern);
-    parsed = {}
-    config_dir_result = os.path.join(main_dir,design,'results')
-    aera_filename = os.path.join(config_dir_result,'area.txt')
-    if os.path.exists(aera_filename):
-        with open(aera_filename,'r') as area_file:
-            for line in area_file:
-                match = comp_patt.search(line)
-                if match: 
-                    parsed[match.group(1)] = match.group(2).replace(',','')  
-    return parsed           
-                
-def GetAreaNumber(parsed):
-    if isinstance(parsed, dict):
-        if 'Slice Registers' in parsed:
-            return parsed['Slice Registers']*1+parsed['Slice LUTs']*1+parsed['RAMB36E1/FIFO36E1s']*3600+parsed['RAMB18E1/FIFO18E1s']*1800+parsed['DSP48E1s']*1200
-    
-    return 0
-
 
 def RunDesignResult(run):
     results_lock.acquire()
@@ -344,29 +302,29 @@ if __name__ == '__main__':
         main_dir = os.path.abspath(opts.main_dir)
         designs_file = opts.designs_file
 
-        
+
         benchmarks = {
             'contexts':[
                 ['engine','fir'],
-                ['adpcm','pocsag']                
+                ['adpcm','pocsag']
             ],
             'benchmarks':{
                 'engine':{
                     'reconfigure_on_finish':False
-                    
+
                 },
             'fir':{
                     'reconfigure_on_finish':False
-                    
+
                 },
             'adpcm':{
                     'reconfigure_on_finish':False
-                    
+
                 },
                 'pocsag':{
                     'reconfigure_on_finish':'0x0'
-                    
-                }            
+
+                }
             }
         }
         configurations = ['assignment2']
@@ -405,7 +363,7 @@ if __name__ == '__main__':
 
         PrintResults(designs,main_results)
 
-        
+
 
         print("Done. Run time is: {0} minutes".format((time.time() - t_launch) / 60))
     except SystemExit:
