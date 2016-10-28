@@ -224,6 +224,7 @@ def Run(main_dir, design, design_num=0):
     #    ParPrint("Written run log.")
     return True
 
+
 def RunDesign(run):
     try:
         t_start = time.time()
@@ -269,6 +270,11 @@ def RunDesign(run):
             t1 = time.time()
             results['Run'] = Run(main_dir,design_filename,design_num)
             results['RunTime'] = time.time() - t1
+            
+        if opts.collect_results:
+            t1 = time.time()
+            results['CollectResults'] = CollectResults(main_dir,design_filename,design_num)
+            results['CollectResultsTime'] = time.time() - t1
 
         results['TotalTime'] = time.time() - t_start
         ParPrint(C_GREEN + '{1} > Returning run variables for {0} ({1})'.format(design_name,design_num))
@@ -285,26 +291,22 @@ def ParseAreaTxt(main_dir, design, design_num=0):
     comp_patt = re.compile(pattern);
     parsed = {}
     config_dir_result = os.path.join(main_dir,design,'results')
-    with open(os.path.join(config_dir_result,'area.txt'),'r') as area_file:
-        for line in area_file:
-            match = comp_patt.search(line)
-            if match: 
-                parsed[match.group(1)] = match.group(2).replace(',','')  
-                
-                
-def ParseAreaTxt(main_dir, design, design_num=0):
-    pattern = '\s*Number of\s*([a-zA-Z0-9/ ]+):\s*([0-9,]+)\s*out of'
-    comp_patt = re.compile(pattern);
-    parsed = {}
-    config_dir_result = os.path.join(main_dir,design,'results')
-    with open(os.path.join(config_dir_result,'area.txt'),'r') as area_file:
-        for line in area_file:
-            match = comp_patt.search(line)
-            if match: 
-                parsed[match.group(1)] = match.group(2).replace(',','')    
+    aera_filename = os.path.join(config_dir_result,'area.txt')
+    if os.path.exists(aera_filename):
+        with open(aera_filename,'r') as area_file:
+            for line in area_file:
+                match = comp_patt.search(line)
+                if match: 
+                    parsed[match.group(1)] = match.group(2).replace(',','')  
+    return parsed           
                 
 def GetAreaNumber(parsed):
-    return parsed['Slice Registers']*1+parsed['Slice LUTs']*1+parsed['RAMB36E1/FIFO36E1s']*3600+parsed['RAMB18E1/FIFO18E1s']*1800+parsed['DSP48E1s']*1200;
+    if isinstance(parsed, dict):
+        if 'Slice Registers' in parsed:
+            return parsed['Slice Registers']*1+parsed['Slice LUTs']*1+parsed['RAMB36E1/FIFO36E1s']*3600+parsed['RAMB18E1/FIFO18E1s']*1800+parsed['DSP48E1s']*1200
+    
+    return 0
+
 
 def RunDesignResult(run):
     results_lock.acquire()
@@ -379,7 +381,7 @@ if __name__ == '__main__':
         with open(designs_file,'r') as csvfile:
             #q = mp.Queue()
             #p = mp.Pool(mp.cpu_count(),RunDesignPar,(q,results))
-            instances = min(mp.cpu_count(),opts.instances)
+            instances = min(mp.cpu_count(),int(opts.instances))
             p = mp.Pool(instances)
             #parr_data=[]
             #dialect = csv.Sniffer().sniff(csvfile.read(1024), delimiters=";,")
