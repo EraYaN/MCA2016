@@ -249,12 +249,7 @@ def RunDesign(run):
         if opts.boardserver_run:
             t1 = time.time()
             results['Run'] = Run(main_dir,design_filename,design_num)
-            results['RunTime'] = time.time() - t1
-
-        if opts.collect_results:
-            t1 = time.time()
-            results['CollectResults'] = CollectResults(main_dir,design_filename,design_num)
-            results['CollectResultsTime'] = time.time() - t1
+            results['RunTime'] = time.time() - t1        
 
         results['TotalTime'] = time.time() - t_start
         ParPrint(C_GREEN + '{1} > Returning run variables for {0} ({1})'.format(design_name,design_num))
