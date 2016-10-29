@@ -135,10 +135,17 @@ def ParseRunLog(run_log):
     return parsed
 
 def CleanupRunLog(parsed):
+    if parsed == {}:
+        return parsed
     parts = ['init','engine','fir','adpcm','pocsag']
-    total = copy.deepcopy(parsed[parts[-1]])
+    offset = -1
+    while parts[offset] not in parsed:
+        offset -= 1
+    total = copy.deepcopy(parsed[parts[offset]])
     prev_part = False
     for part in parts:
+        if part not in parsed:
+            continue
         if prev_part != False:
             for metric in parsed[part]:
                 parsed[part][metric] -= parsed[prev_part][metric]
@@ -148,6 +155,8 @@ def CleanupRunLog(parsed):
     return parsed
 
 def GetRunLogMetrics(parsed):
+    if parsed == {}:
+        return ([],[])
     metrics = []
     for metric in runlog_metrics:
         metrics.append(parsed['total'][runlog_metrics[metric]]-parsed['init'][runlog_metrics[metric]])
@@ -189,9 +198,19 @@ def ProcessDesign(collection_dir,design):
     clean_runlogs = {}
     clean_runlogs_extra = {}
     for runlog in runlogs:
+        print("Parsing {0}".format(runlog))
         (result, extra_result) = GetRunLogMetrics(CleanupRunLog(ParseRunLog(runlog)))
 
-        core = runlog[-9:-4] # from ./run0-core0.log
+        match = re.search('run([0-9]+)-core([0-9]+)(-ctxt([0-9]+))?\.log',runlog)
+
+        if match:
+            core = match.group(2)
+            ctxt = match.group(3)
+        else:
+            continue;
+
+        if ctxt is not None:
+            continue;
 
         if core not in clean_runlogs:
             clean_runlogs[core] = []
@@ -206,8 +225,12 @@ def ProcessDesign(collection_dir,design):
         print('Extra for {0}'.format(core))
         pp.pprint(GetListAverage(clean_runlogs_extra[core]))
 
-    core0_metrics = GetListAverage(clean_runlogs['core0'])
-    core0_extra_metrics = GetListAverage(clean_runlogs_extra['core0'])
+    core0_metrics = []
+    core0_extra_metrics = []
+    if '0' in clean_runlogs:
+        core0_metrics = GetListAverage(clean_runlogs['0'])
+    if '0' in clean_runlogs_extra:
+        core0_extra_metrics = GetListAverage(clean_runlogs_extra['0'])
 
     return [o[2:].replace('-',':') for o in design.split('_')] + [area_number,energy,performance,timing_passed] + [int(round(o)) for o in core0_metrics] + core0_extra_metrics
 
