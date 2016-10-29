@@ -140,8 +140,8 @@ def MakeConfigCompile(main_dir, design, data, benchmark_data, contexts=1, design
     print(context_benches)
     ParPrint("{0}, {1}, {2}".format(contexts,len(benchmark_data['contexts']),len(context_benches)))
     reconfigure_at_start = '0x0'
-    if context > 1:
-        reconfigure_at_start='0x'+''.join([c for c in range(0,contexts)]
+    if contexts > 1:
+        reconfigure_at_start='0x'+''.join([format(c,'x') for c in range(0,contexts)])
 
     template_mc = jinja_env.get_template('main-core.c.j2')
     for context in range(0,contexts):
