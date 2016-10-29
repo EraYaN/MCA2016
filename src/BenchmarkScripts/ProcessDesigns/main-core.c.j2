@@ -20,7 +20,7 @@ volatile char *record_ptr = (volatile char *){{record_ptr}};
 
 int main(void) {
 
-	{% if reconfigure_at_start is not sameas False %}
+	{% if (reconfigure_at_start is not sameas False) and (context is sameas 0) %}
 	reconfigure({{reconfigure_at_start}});
 	{% endif %}
     // Log the performance counters for debugging purposes. This times the C

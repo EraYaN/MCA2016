@@ -147,7 +147,7 @@ def MakeConfigCompile(main_dir, design, data, benchmark_data, contexts=1, design
     for context in range(0,contexts):
 
         ParPrint("{0}".format(context))
-        maincore_file = template_mc.render(record_ptr="0x{0:02X}".format(base_address + context * context_offset),benchmarks=context_benches[context],benchmark_data=benchmark_data['benchmarks'],reconfigure_at_start=reconfigure_at_start)
+        maincore_file = template_mc.render(record_ptr="0x{0:02X}".format(base_address + context * context_offset),benchmarks=context_benches[context],benchmark_data=benchmark_data['benchmarks'],reconfigure_at_start=reconfigure_at_start,context=context)
         with open(os.path.join(config_dir_src,'main-core0-ctxt{0}.c'.format(context)),'w') as file_mc:
             file_mc.write(maincore_file)
     return True
