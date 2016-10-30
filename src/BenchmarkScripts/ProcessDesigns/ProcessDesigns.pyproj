@@ -5,13 +5,17 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>0013701a-04f8-4b9d-9138-4733b1cabf92</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>ProcessDesigns.py</StartupFile>
+    <StartupFile>ProcessResults.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>ProcessDesigns</Name>
     <RootNamespace>ProcessDesigns</RootNamespace>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <CommandLineArguments>--collection-dir="F:\Users\Erwin\Dropbox\MCA 2016\Designs\Results"</CommandLineArguments>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +26,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ProcessResults.py" />
+    <Compile Include="CollectResults.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ProcessDesigns.py" />
   </ItemGroup>
   <ItemGroup>

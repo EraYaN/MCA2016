@@ -19,13 +19,16 @@
 volatile char *record_ptr = (volatile char *){{record_ptr}};
 
 int main(void) {
-    
+
+	{% if (reconfigure_at_start is not sameas False) and (context is sameas 0) %}
+	reconfigure({{reconfigure_at_start}});
+	{% endif %}
     // Log the performance counters for debugging purposes. This times the C
     // runtime initialization code. Note that the logging takes time as well;
     // you might want to remove them for your final measurements. The server
     // and simulation will always give you a total cycle count.
     log_perfcount("init");
-    
+
     {% for benchmark in benchmarks %}
 	// Run the {{benchmark}} benchmark and log performance.
     {{benchmark}}_main();
@@ -34,5 +37,5 @@ int main(void) {
 	reconfigure({{benchmark_data[benchmark]['reconfigure_on_finish']}});
 	{% endif %}
 	{% endfor %}
-    
+
 }
