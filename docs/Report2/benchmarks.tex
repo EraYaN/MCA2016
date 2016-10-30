@@ -6,17 +6,19 @@ ADPCM refers to Adaptive Differential Pulse-Code Modulation, a method to represe
 POCSAG is a protocol used to transmit data to a pager.
 
 
-A first look at the ADPCM code reveals that there is an encode and a decode function although only the latter function is actually called.
-This function contains declarations, performs arithmetical operations, performs bitwise shifts, and typecasts to the long data type.
-Furthermore this function is nested in a for loop that repeats 50 times which means the flow is predictable.
-The amount of multiplications and divisions is limited.
+Engine and fir are the other two benchmarks that were analyzed previously, with help of the gprof and the rgg utility it has been shown that both programs make heavy use of divisions.\\
+A look at the ADPCM C code reveals that there is an encode and a decode function. 
+These functions contain declarations, perform arithmetical operations, bitwise shifts, and typecasts to the long data type. 
+Furthermore this function is nested in a for loop that repeats 50 times which means the flow is predictable. 
+The amount of multiplications and divisions are limited. 
+This time around the rgg utility was not as useful as with previous benchmarks. 
+DAG visualization also showed that the DAGs weren't very shallow and so there is not a lot of room for ILP improvement.\\
+The pocsag C code shows that there are a lot of if-else statements used. 
+Creation of a control flow graph confirmed this.
+The find-syndromes() function is called a lot and mainly performs bitwise operations. 
+The program however barely performs multiplications or divisions.
 
-
-The pocsag C code shows that there are a lot of if-else statements are used.
-The find-syndromes() function is called a lot and mainly performs bitwise operations.
-The program barely performs multiplications or divisions.
-
-\subsection{Analysis}
+\subsection{Compiler and Cache Analysis}
 \label{ssec:benchmarks-analysis}
 In Lab 1 we found the following compiler flags: \textbf{-O4 -autoinline -prefetch -d -fexpand-div}.
 In this lab prefetch is unavailable so its compiler flag was dropped.
@@ -29,3 +31,4 @@ Especially fir needs a big instruction cache due to the big program size as the 
 Engine less so, there are still quite some divisions but they have less impact on the required instruction cache size, due to there iterative nature so the same instructions can be reused.
 Engine only has two divisions in it's code while fir has five.
 The two smallest benchmarks have insignificant impact.
+
