@@ -18,7 +18,7 @@ Creation of a control flow graph confirmed this.
 The find-syndromes() function is called a lot and mainly performs bitwise operations. 
 The program however barely performs multiplications or divisions.
 
-\subsection{Compiler and Cache Analysis}
+\subsection{Compiler flag and Cache Analysis}
 \label{ssec:benchmarks-analysis}
 In Lab 1 we found the following compiler flags: \textbf{-O4 -autoinline -prefetch -d -fexpand-div}.
 In this lab prefetch is unavailable so its compiler flag was dropped.
@@ -29,6 +29,6 @@ They do benefit from the \textbf{-autoinline}, so it was kept for the extra two.
 As for the use of the instruction cache of the benchmarks.
 Especially fir needs a big instruction cache due to the big program size as the result of many divisions and the compiler flag \textbf{-fexpand-div}.
 Engine less so, there are still quite some divisions but they have less impact on the required instruction cache size, due to there iterative nature so the same instructions can be reused.
-Engine only has two divisions in it's code while fir has five.
+Engine only has two divisions in its code while fir has five.
 The two smallest benchmarks have insignificant impact.
 

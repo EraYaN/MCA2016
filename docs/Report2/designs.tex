@@ -122,13 +122,13 @@ For our high performance design, we selected the design specified in \cref{tab:h
     \end{subtable}
 \end{table}
 
-In the \cref{tab:other-high-performance-design-candidates} all candidates for the high performance design are specified, it uses the same units as \cref{tab:high-performance-design-parameters}.
+In \cref{tab:other-high-performance-design-candidates} all candidates for the high performance design are specified, it uses the same units as \cref{tab:high-performance-design-parameters}.
 All designs are ordered by their amount of execution cycles.
 In the dual core design the first core runs the engine and pocsag benchmarks, the second core (with larger instruction cache) runs fir and adpcm.
 This workload distribution was chosen so that each core had one large benchmark and one small benchmark to ensure that both cores finish at roughly the same time.
 When a core has finished processing it is shut down using $\rho$-VEX reconfigurability in order to save power.
 The second core was assigned more instruction cache memory because the fir benchmark had a high miss percentage when the instruction cache was \SI{16}{\kibi\byte} or smaller.
-The high performance design in \cref{tab:high-performance-design-parameters} was chosen for it's low cycle count combined with a low energy and area use compared to the other high performance candidates.
+The high performance design in \cref{tab:high-performance-design-parameters} was chosen for its low cycle count combined with a low energy and area use compared to the other high performance candidates.
 
 \begin{table}[H]
     \centering
@@ -194,7 +194,7 @@ For our balanced design, we selected the design specified in \cref{tab:balanced-
     \end{subtable}
 \end{table}
 
-In the \cref{tab:other-balanced-design-candidates} all candidates for the balanced design are specified, it uses the same units as \cref{tab:balanced-design-parameters}.
+In \cref{tab:other-balanced-design-candidates} all candidates for the balanced design are specified, it uses the same units as \cref{tab:balanced-design-parameters}.
 We ordered all designs by their Energy Cycles (as defined in \cref{ssec:soc-design-extra-custom-metrics}).
 This way we can order the designs on both Cycles and Energy at the same time.
 The balanced design dual core uses the same workload distribution as discussed in \cref{ssec:soc-design-high-performance}, again with a larger instruction cache for the second core and $\rho$-VEX reconfigurability for power saving.
@@ -259,12 +259,12 @@ For our low power design, we selected the design specified in \cref{tab:low-powe
     \end{subtable}
 \end{table}
 
-In the \cref{tab:other-low-power-design-candidates} all candidates for the low power design are specified, it uses the same units as \cref{tab:low-power-design-parameters}.
+In \cref{tab:other-low-power-design-candidates} all candidates for the low power design are specified, it uses the same units as \cref{tab:low-power-design-parameters}.
 We ordered all designs by their Energy Area Cycles (as defined in \cref{ssec:soc-design-extra-custom-metrics}).
 This way we can order the designs on both Cycles, Area and Energy at the same time.
 The chosen design is significantly slower than the other designs discussed in this section.
 Unlike the balanced and high performance designs, this design is a single core so all benchmarks run sequentially.
-For the low power/area design, the design shown in \cref{tab:low-power-design-parameters} still ended up being chosen when execution cycles, power and area are equally taken into account for it's very low area and power usage. 
+For the low power/area design, the design shown in \cref{tab:low-power-design-parameters} still ended up being chosen when execution cycles, power and area are equally taken into account for its very low area and power usage. 
 
 \begin{table}[H]
     \centering
