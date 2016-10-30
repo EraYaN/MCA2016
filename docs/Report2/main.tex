@@ -2,7 +2,6 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
-\usepackage{natbib}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{subcaption}
@@ -19,6 +18,20 @@
 ]{siunitx}
 \DeclareSIUnit\cycles{Cyc}
 \DeclareSIUnit\transistors{Trans}
+\usepackage[
+%backend=bibtex,
+backend=biber,
+    texencoding=utf8,
+bibencoding=utf8,
+style=numeric,
+citestyle=numeric,
+    sortlocale=en_US,
+    language=auto,
+    backref=true,
+    abbreviate=false,
+    date=iso8601
+]{biblatex}
+\addbibresource{bibliography.bib}
 \begin{document}
 
 
@@ -64,6 +77,6 @@ Lars van Leeuwen (4239784)\\[2.8cm]
 \input{reflection.tex}
 
 
-%\bibliographystyle{plain}
-%\bibliography{references}
+\printbibliography
+
 \end{document}

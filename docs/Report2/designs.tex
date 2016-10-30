@@ -60,13 +60,14 @@ This is the following equation. Thus the unit of this metric is: \si{\kilo\cycle
 \end{equation}
 
 \subsection{Cache Size}
+\label{ssec:soc-design-cache-size}
 First we wanted to find the effect of the cache size.
 In \cref{tab:cache-size-variation-results} all the results are shown.
 These tests were done with a single context four lane, four multiplier configuration.
 From those numbers it is clear that any data cache size over \SI{2}{\kibi\byte} is a good size.
 Only \SI{8}{\kibi\byte} make a big difference, but not worth it.
 The instruction cache size has a much bigger impact on the performance.
-Some of our benchmarks rely heavily on the instruction cache, as shown in \cref{sec:benchmark-analysis}. %TODO
+Some of our benchmarks rely heavily on the instruction cache, as shown in \cref{ssec:benchmarks-analysis}.
 We see that \SI{32}{\kibi\byte} is by far the best candidate.
 
 \begin{table}[H]
@@ -91,7 +92,7 @@ We see that \SI{32}{\kibi\byte} is by far the best candidate.
 \end{table}
 
 \subsection{High performance}
-\label{sub:highperf}
+\label{ssec:soc-design-high-performance}
 For our high performance design, we selected the design specified in \cref{tab:high-performance-design-parameters}. Our design is a dual core design.
 \begin{table}[H]
     \caption{High performance design}
@@ -163,6 +164,7 @@ The high performance design in \cref{tab:high-performance-design-parameters} was
 \end{table}
 
 \subsection{Balanced}
+\label{ssec:soc-design-balanced}
 For our balanced design, we selected the design specified in \cref{tab:balanced-design-parameters}. Our design is a dual core design.
 \begin{table}[H]
     \caption{Balanced design}
@@ -203,9 +205,9 @@ For our balanced design, we selected the design specified in \cref{tab:balanced-
 In the \cref{tab:other-balanced-design-candidates} all candidates for the balanced design are specified, it uses the same units as \cref{tab:balanced-design-parameters}.
 We ordered all designs by their Energy Cycles (as defined in \cref{ssec:soc-design-extra-custom-metrics}).
 This way we can order the designs on both Cycles and Energy at the same time.
-The balanced design dual core uses the same workload distribution as discussed in \cref{sub:highperf}, again with a larger instruction cache for the second core and $\rho$-VEX reconfigurability for power saving.
+The balanced design dual core uses the same workload distribution as discussed in \cref{ssec:soc-design-high-performance}, again with a larger instruction cache for the second core and $\rho$-VEX reconfigurability for power saving.
 The balanced design was chosen for the very low energy use but still good performance in execution cycles.
-The chosen design has a large area compared to the other candidates, but it was decided that this was not a problem considering a design with smaller area will be discussed in \cref{sub:lowpower}.
+The chosen design has a large area compared to the other candidates, but it was decided that this was not a problem considering a design with smaller area will be discussed in \cref{ssec:soc-design-low-power}.
 
 
 \begin{table}[H]
@@ -227,7 +229,7 @@ The chosen design has a large area compared to the other candidates, but it was 
 \end{table}
 
 \subsection{Low power/area}
-\label{sub:lowpower}
+\label{ssec:soc-design-low-power}
 For our low power design, we selected the design specified in \cref{tab:low-power-design-parameters}.
 \begin{table}[H]
     \caption{Low power design}

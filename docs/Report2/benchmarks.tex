@@ -1,4 +1,31 @@
-\section{Benchmark Analysis}
-As previously displayed in the first report it's beneficial to analyze the given benchmarks to allow for good optimization. This time the two new benchmarks adpcm and pocsag have been given. ADPCM refers to Adaptive Differential Pulse-Code Modulation, a method to represent sampled analog signals whereby the size of the quantization step can be varied, this is useful in for example voice encoding. POCSAG is a protocol used to transmit data to a pager.\\
-A first look at the ADPCM code reveals that there is an encode and a decode function although only the latter function is actually called. This function contains declarations, performs arithmetical operations, performs bitwise shifts, and typecasts to the long data type. Furthermore this function is nested in a for loop that repeats 50 times which means the flow is predictable. The amount of multiplications and divisions is limited.\\
-The pocsag C code shows that there are a lot of if-else statements are used. The find-syndromes() function is called a lot and mainly performs bitwise operations. The program barely performs multiplications or divisions.
+\section{Benchmarks}
+\label{sec:benchmarks}
+As previously displayed in the Lab 1 report it's beneficial to analyze the given benchmarks to allow for good optimization.
+This time two new extra benchmarks adpcm and pocsag have been assigned.
+ADPCM refers to Adaptive Differential Pulse-Code Modulation, a method to represent sampled analog signals whereby the size of the quantization step can be varied, this is useful in for example voice encoding.
+POCSAG is a protocol used to transmit data to a pager.
+
+
+A first look at the ADPCM code reveals that there is an encode and a decode function although only the latter function is actually called.
+This function contains declarations, performs arithmetical operations, performs bitwise shifts, and typecasts to the long data type.
+Furthermore this function is nested in a for loop that repeats 50 times which means the flow is predictable.
+The amount of multiplications and divisions is limited.
+
+
+The pocsag C code shows that there are a lot of if-else statements are used.
+The find-syndromes() function is called a lot and mainly performs bitwise operations.
+The program barely performs multiplications or divisions.
+
+\subsection{Analysis}
+\label{ssec:benchmarks-analysis}
+In Lab 1 we found the following compiler flags: \textbf{-O4 -autoinline -prefetch -d -fexpand-div}.
+In this lab prefetch is unavailable so its compiler flag was dropped.
+The extra benchmarks, adpcm and pocsag, are insignificant size wise, less than a tenth the size of the other two.
+They do not need the \textbf{-fexpand-div} however, so that was dropped.
+They do benefit from the \textbf{-autoinline}, so it was kept for the extra two.
+
+As for the use of the instruction cache of the benchmarks.
+Especially fir needs a big instruction cache due to the big program size as the result of many divisions and the compiler flag \textbf{-fexpand-div}.
+Engine less so, there are still quite some divisions but they have less impact on the required instruction cache size, due to there iterative nature so the same instructions can be reused.
+Engine only has two divisions in it's code while fir has five.
+The two smallest benchmarks have insignificant impact.
