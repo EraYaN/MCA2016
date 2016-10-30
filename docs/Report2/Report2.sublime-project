@@ -1,0 +1,61 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"file_exclude_patterns": [
+			"*.pyc",
+			"*.pyo",
+			"*.exe",
+			"*.dll",
+			"*.obj",
+			"*.o",
+			"*.a",
+			"*.lib",
+			"*.so",
+			"*.dylib",
+			"*.ncb",
+			"*.sdf",
+			"*.suo",
+			"*.pdb",
+			"*.idb",
+			".DS_Store",
+			"*.class",
+			"*.psd",
+			"*.db",
+			"*.sublime-workspace",
+			"*.aux",
+			"*.toc",
+			"*-blx.bib",
+			"*.bbl",
+			"*.blg",
+			"*.run.xml",
+			"*.out",
+			"*.log",
+			"*.synctex.gz*",
+			"*.md5",
+			"*.auxlock",
+			"*.bcf",
+			"*.lof",
+			"*.lot",
+			"thesis.pdf",
+			"*.vsdx",
+			"*.eps",
+			"*latexmk",
+			"*.ps1"]
+		}
+	],
+	
+	"settings":
+	{
+		"TEXroot": "main.tex",
+		"builder_settings" : {
+			"windows" : {
+				"env": {
+					"BIBTEX": "biber"
+				}
+			}
+		},
+		"spell_check": true
+	}
+}

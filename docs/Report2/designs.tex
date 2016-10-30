@@ -1,4 +1,5 @@
 \section{SoC design}
+<<<<<<< HEAD
 \subsection{Area estimation & energy consumption}
 For a design with optimal area and energy characteristics it's important to be able to estimate how much space elements take up on an FPGA and ultimately an ASIC. Area wise there are some vital difference between an FPGA and an ASIC as an ASIC can directly implement functions whereas an FPGA has predefined blocks that might be utilized to implement a certain function but certainly isn't optimized. For example: a LUT might be used to implement a NAND operation, on an ASIC this would be implemented with a NAND gate which requires far fewer transistors than a LUT.\\\\
 To gain insight into area utilization we quantified the area in terms of transistors for the following four elements: registers, LUTs, RAM blocks, and DSPs/multipliers. The first element, registers, take up very little space. The reason being that a register can only store 1 bit. Assuming a D-type flip flop is used, five transistors are required. %\cite{Kumar Chakravarti}
@@ -8,9 +9,246 @@ Furthermore BRAM, which is very close to SRAM, is used on the FPGA. A single SRA
 however reveals that the DSP has a 25 times 18 bit two's complement multiplier. This is of main concern for the ASIC as the DSPs are used by multipliers on the $\rho$-VEX processors. A basic two's complement multiplier can be realized with full adders, AND gates, and NAND gates. For a 25 times 18 bit multiplier this would require about 409 AND ports, 41 NAND ports, and 425 full adders. A single full adder consists of 2 AND ports, 2 XOR ports and an OR gate. Subsequently the amount of transistors for a multiplier can be calculated to be about 12.818 transistors. As a DSP contains quite some more components than just a multiplier the amount of transistors is going to be a lot higher. Depending on the DSP this might go in to the hundreds of thousands of transistors.\\
 The energy consumption is directly related to the amount of transistors in use. Fortunately because the area's are estimated in the amount of transistors, it can be said that the energy consumption is directly related to the amount of transistors. The higher the amount of transistors, the higher the energy consumption.
 
+=======
+\subsection{Area estimation}
+For a design with optimal area and energy characteristics it's important to be able to estimate how much space elements take up on an FPGA and ultimately an ASIC.
+Area wise there are some vital difference between an FPGA and an ASIC as an ASIC can directly implement functions whereas an FPGA has predefined blocks that might be utilized to implement a certain function but certainly isn't optimized.
+For example: a LUT might be used to implement a NAND operation, on an ASIC this would be implemented with a NAND gate which requires far fewer transistors than a LUT.
+
+
+To gain insight into area utilization we quantified the area in terms of transistors for the following four elements: registers, LUTs, RAM blocks, and DSPs/multipliers.
+The first element, registers, take up very little space.
+The reason being that a register can only store 1 bit.
+Assuming a D-type flip flop is used, five transistors are required \cite{Kumar Chakravarti}.
+Betz (1998) displays that a LUT consists of SRAM, multiplexers, input buffers, and complementers.
+Based on these components a 4-LUTs is calculated to contain about 167 transistors.
+However the FPGA used, the Xilinx XC6VLX240T, mainly utilizes 6-LUTs as is found by observing the area.txt file.
+Scaling the amount of transistors to a 6-LUT amounts to about 198 transistors.
+In case a logic function has to be implemented, LUTs cause quite some overhead.
+Depending on the amount of inputs a logic port needs, the amount of transistors necessary to implement logic functions among the likes of NOR, NAND, and more can be range from about 2 to 22 transistors (assuming a maximum of 10 input logic ports).
+Since we think it's likely most logic ports don't go up to 10 input ports we assume an average of 4 input ports which leads to about 8 transistors on average per logic port on an ASIC.
+\\
+Furthermore BRAM, which is very close to SRAM, is used on the FPGA.
+A single SRAM cell requires six transistors \cite{Kumar Chakravarti}, as the FPGA has 18 and 36 KB BRAM blocks, this would mean either about 108.
+000 or 216.
+000 transistors are required.
+Lastly DSPs are a a bit harder to estimate area wise.
+%TODO
+Reference{} however reveals that the DSP has a 25 times 18 bit two's complement adder.
+This is of main concern for the ASIC as the DSPs are used by multipliers on the $\rho$-VEX processors.
+
+%TODO
+>>>>>>> origin/master
 
 %Reference: http://www.ijsret.org/pdf/EATHD-15044.pdf
 %Reference: https://booksonweb.files.wordpress.com/2011/11/digital-integrated-circuits-a-design-perspective-by-jan-m-rabaey.pdf
+
+\subsection{Extra Custom Metrics}
+\label{ssec:soc-design-extra-custom-metrics}
+To help with selecting the best performing designs in each segment we added a couple of metrics.\\
+
+
+\textbf{Energy Cycles}
+This is the following equation. Thus the unit of this metric is: \si{\kilo\cycles\joule}
+\begin{equation}
+\frac{Cycles}{10^3} \cdot \frac{Energy}{10^3}
+\end{equation}
+
+\textbf{Area Cycles}
+This is the following equation. Thus the unit of this metric is: \si{\kilo\cycles\giga\transistors}
+\begin{equation}
+\frac{Cycles}{10^3} \cdot \frac{Energy}{10^3} \cdot \frac{Area}{10^6}
+\end{equation}
+
+\textbf{Energy Area Cycles}
+This is the following equation. Thus the unit of this metric is: \si{\kilo\cycles\joule\mega\transistors}
+\begin{equation}
+\frac{Cycles}{10^3} \cdot \frac{Area}{10^9}
+\end{equation}
+
+
 \subsection{High performance}
-\subsection{Low power}
+For our high performance design, we selected the design specified in \cref{tab:high-performance-design-parameters}. Our design is a dual core design.
+\begin{table}[H]
+    \caption{High performance design}
+    \label{tab:high-performance-design-parameters}
+    \begin{subtable}{.45\textwidth}
+        \centering
+        \caption{High performance design parameters}
+        \begin{tabular}{lSSs}
+            \toprule
+            \textbf{Parameter} & \textbf{C. 0} & \textbf{C. 1} &\\
+            \midrule
+            Lane Configuration & {0110} & {0110} &\\
+            Stop Bit & 2 & 2 & \\
+            I. Cache Size & 32 & 32 & \kilo\bit \\
+            D. Cache Size & 2 & 2 & \kilo\bit\\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+    \quad
+    \begin{subtable}{.55\textwidth}
+        \centering
+        \caption{High performance design performance metrics}
+        \begin{tabular}{lSs}
+            \toprule
+            \textbf{Metric} & \textbf{Value} &\\
+            \midrule
+            Area & 17.071595 & \mega \\
+            Cycles & 0.804621 & \mega\cycles\\
+            Energy & 3.01 & \milli\joule\\
+            En. Cyc. & 2.42 & \kilo\cycles\joule \\
+            Area Cyc. & 13.74 & \kilo\cycles\giga\transistors \\
+            En. Area Cyc. & 41.35 & \kilo\cycles\joule\mega\transistors \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+\end{table}
+
+In the \cref{tab:other-high-performance-design-candidates} all candidates for the high performance design are specified, it uses the same units as \cref{tab:high-performance-design-parameters}.
+We ordered all designs by their Cycles (as defined in \cref{ssec:soc-design-extra-custom-metrics}).
+This way we can order the designs on Cycles at the same time.
+
+\begin{table}[H]
+    \centering
+    \caption{Other high performance design candidates (units same as in \cref{tab:high-performance-design-parameters})}
+    \label{tab:other-high-performance-design-candidates}
+    \begin{tabular}{lllllSSSS}
+        \toprule
+        \# & \textbf{Lanes} & \textbf{Stop Bit} & \textbf{I. Cache}& \textbf{D. Cache} & \textbf{Area}& \textbf{Cycles} & \textbf{Energy} \\
+        \midrule
+
+        1 & 00011000\&00011000 &  2\&2 & 16k\&32k & 2k\&8k &  40.711470   &  0.778093&   8.18 \\
+        2 & 00011000\&00011000 &  2\&2 & 16k\&32k & 4k\&4k &  40.334025   &  0.779408&   7.86 \\
+        %2 & 00011000\&00011000 &  2\&2 & 16k\&32k & 2k\&2k &  40232925 &   7.09  &  779773
+        3 & 00111100\&00111100 &  2\&2 & 16k\&32k & 4k\&4k &  42.445045   &  0.788404&   7.69 \\
+        %00111100\&00111100 &  2\&2 & 32k\&32k & 4k\&4k &  42504185 &   7.45  &  788776
+        4 & 01111110\&01111110 &  2\&2 & 16k\&32k & 4k\&4k &  44.585405   &  0.788884&   7.66 \\
+        %01111110\&01111110 &  2\&2 & 32k\&32k & 4k\&4k &  44636085 &   7.2 & 788886
+        5 & 0110\&0110  & 2\&2 & 16k\&32k & 2k\&2k  & 17.071595    & 0.804621&   3.01 \\
+        %01111110\&01111110  & 2\&2 &16k\&16k &4k\&4k &  44534185   & 8.31 &   1236457
+        6 & 11111111  &  2  & 32k &2k  & 23.697505  &   1.407281&  6.53 \\
+        7 & 0110:0110 &  2  & 16k& 2k & 23.321015  & 1.408495 &  7.90 \\
+        8 & 1111 &   2  & 32k &2k  & 10.467710    & 1.430374 & 2.44 \\
+
+        \bottomrule
+    \end{tabular}
+\end{table}
+
 \subsection{Balanced}
+For our balanced design, we selected the design specified in \cref{tab:balanced-design-parameters}. Our design is a dual core design.
+\begin{table}[H]
+    \caption{Balanced design}
+    \label{tab:balanced-design-parameters}
+    \begin{subtable}{.45\textwidth}
+        \centering
+        \caption{Balanced design parameters}
+        \begin{tabular}{lSSs}
+            \toprule
+            \textbf{Parameter} & \textbf{C. 0} & \textbf{C. 1} &\\
+            \midrule
+            Lane Configuration & {0110} & {0110} &\\
+            Stop Bit & 2 & 2 & \\
+            I. Cache Size & 32 & 32 & \kilo\bit \\
+            D. Cache Size & 2 & 2 & \kilo\bit\\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+    \quad
+    \begin{subtable}{.55\textwidth}
+        \centering
+        \caption{Balanced design performance metrics}
+        \begin{tabular}{lSs}
+            \toprule
+            \textbf{Metric} & \textbf{Value} &\\
+            \midrule
+            Area & 17.071595 & \mega \\
+            Cycles & 0.804621 & \mega\cycles\\
+            Energy & 3.01 & \milli\joule\\
+            En. Cyc. & 2.42 & \kilo\cycles\joule \\
+            Area Cyc. & 13.74 & \kilo\cycles\giga\transistors \\
+            En. Area Cyc. & 41.35 & \kilo\cycles\joule\mega\transistors \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+\end{table}
+
+In the \cref{tab:other-balanced-design-candidates} all candidates for the low power design are specified, it uses the same units as \cref{tab:balanced-design-parameters}.
+We ordered all designs by their Energy Cycles (as defined in \cref{ssec:soc-design-extra-custom-metrics}).
+This way we can order the designs on both Cycles and Energy at the same time.
+
+\begin{table}[H]
+    \centering
+    \caption{Other balanced design candidates (units same as in \cref{tab:balanced-design-parameters})}
+    \label{tab:other-balanced-design-candidates}
+    \begin{tabular}{lllllSSSS}
+        \toprule
+        \# & \textbf{Lanes} & \textbf{Stop Bit} & \textbf{I. Cache}& \textbf{D. Cache} & \textbf{Area}& \textbf{Cycles} & \textbf{Energy} & \textbf{En. Cycl.}\\
+        \midrule
+        1 & 0110 \& 0110 & 2 \& 2 & 16 \& 32 & 2 \& 2 & 17.071595 & 0.804621 & 3.01 & 2.42 \\
+        2 & 1111 & 2 & 32 & 2 & 10.467710 & 1.430374 & 2.44 & 3.49 \\
+        3 & 1111 & 4 & 16 & 2 & 9.489250 & 1.678799 & 2.3 &   3.86 \\
+        4 & 0110 & 4 & 16 & 2 & 8.263270 & 1.725540 & 2.3 &   3.97 \\
+        5 & 1111 & 4 & 32 & 2 & 10.456770 & 1.463118 & 2.71 & 3.97 \\
+        6 & 11:11 & 2 & 16 & 2 & 11.877480 & 1.505265 & 2.68 & 4.03 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Low power}
+For our low power design, we selected the design specified in \cref{tab:low-power-design-parameters}.
+\begin{table}[H]
+    \caption{Low power design}
+    \label{tab:low-power-design-parameters}
+    \begin{subtable}{.4\textwidth}
+        \centering
+        \caption{Low power design parameters}
+        \begin{tabular}{lSs}
+            \toprule
+            \textbf{Parameter} & \textbf{C.}\\
+            \midrule
+            Lane Config & {01} &\\
+            Stop Bit & 2 & \\
+            Instruction Cache Size & 16 & \kilo\bit \\
+            Data Cache Size & 2 & \kilo\bit \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+    \quad
+    \begin{subtable}{.6\textwidth}
+        \centering
+        \caption{Low power design performance metrics}
+        \begin{tabular}{lSs}
+            \toprule
+            \textbf{Metric} & \textbf{Value} &\\
+            \midrule
+            Area & 5.088640 & \mega \\
+            Cycles & 1.919640 & \mega\cycles\\
+            Energy & 2.71 & \milli\joule\\
+            En. Cyc. & 5.20 & \kilo\cycles\joule \\
+            Area Cyc. & 9.77 & \kilo\cycles\giga\transistors \\
+            En. Area Cyc. & 26.47 & \kilo\cycles\joule\mega\transistors \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+\end{table}
+
+In the \cref{tab:other-low-power-design-candidates} all candidates for the low power design are specified, it uses the same units as \cref{tab:low-power-design-parameters}.
+We ordered all designs by their Energy Area Cycles (as defined in \cref{ssec:soc-design-extra-custom-metrics}).
+This way we can order the designs on both Cycles, Area and Energy at the same time.
+\begin{table}[H]
+    \centering
+    \caption{Other low power design candidates (units same as in \cref{tab:low-power-design-parameters})}
+    \label{tab:other-low-power-design-candidates}
+    \begin{tabular}{lllllSSSS}
+        \toprule
+        \# & \textbf{Lanes} & \textbf{Stop Bit} & \textbf{I. Cache}& \textbf{D. Cache} & \textbf{Area}& \textbf{Cycles} & \textbf{Energy} & \textbf{En. Area Cycl.}\\
+        \midrule
+        1 & {01} & 2 & 16 & 2 & 5.088640 & 1.919640 & 2.71 & 26.47 \\
+        2 & {11} & 2 & 16 & 2 & 5.699445 & 1.826294 & 3.00 & 31.23 \\
+        3 & {10} & 2 & 16 & 2 & 5.195165 & 1.975335 & 3.08 & 31.61 \\
+        4 & {0110} & 4 & 16 & 2 & 8.263270 & 1.725540 & 2.3 & 32.79 \\
+        5 & {0110} & 2 & 16 & 2 & 8.269830 & 1.696177 & 2.48 & 34.79 \\
+        \bottomrule
+    \end{tabular}    
+\end{table}
