@@ -68,6 +68,7 @@ This is the following equation. Thus the unit of this metric is: \si{\kilo\cycle
 
 
 \subsection{High performance}
+\label{sub:highperf}
 For our high performance design, we selected the design specified in \cref{tab:high-performance-design-parameters}. Our design is a dual core design.
 \begin{table}[H]
     \caption{High performance design}
@@ -79,10 +80,10 @@ For our high performance design, we selected the design specified in \cref{tab:h
             \toprule
             \textbf{Parameter} & \textbf{C. 0} & \textbf{C. 1} &\\
             \midrule
-            Lane Configuration & {0110} & {0110} &\\
+            Lane Configuration & {00011000} & {00011000} &\\
             Stop Bit & 2 & 2 & \\
-            I. Cache Size & 32 & 32 & \kilo\bit \\
-            D. Cache Size & 2 & 2 & \kilo\bit\\
+            I. Cache Size & 16 & 32 & \kibi\byte \\
+            D. Cache Size & 2 & 2 & \kibi\byte\\
             \bottomrule
         \end{tabular}
     \end{subtable}
@@ -106,8 +107,12 @@ For our high performance design, we selected the design specified in \cref{tab:h
 \end{table}
 
 In the \cref{tab:other-high-performance-design-candidates} all candidates for the high performance design are specified, it uses the same units as \cref{tab:high-performance-design-parameters}.
-We ordered all designs by their Cycles (as defined in \cref{ssec:soc-design-extra-custom-metrics}).
-This way we can order the designs on Cycles at the same time.
+All designs are ordered by their amount of execution cycles.
+In the dual core design the first core runs the engine and pocsag benchmarks, the second core (with larger instruction cache) runs fir and adpcm.
+This workload distribution was chosen so that each core had one large benchmark and one small benchmark to ensure that both cores finish at roughly the same time.
+When a core has finished processing it is shut down using $\rho$-VEX reconfigurability in order to save power.
+The second core was assigned more instruction cache memory because the fir benchmark had a high miss percentage when the instruction cache was \SI{16}{\kibi\byte} or smaller.
+The high performance design in \cref{tab:high-performance-design-parameters} was chosen for it's low cycle count combined with a low energy and area use compared to the other high performance candidates.
 
 \begin{table}[H]
     \centering
@@ -118,18 +123,17 @@ This way we can order the designs on Cycles at the same time.
         \# & \textbf{Lanes} & \textbf{Stop Bit} & \textbf{I. Cache}& \textbf{D. Cache} & \textbf{Area}& \textbf{Cycles} & \textbf{Energy} \\
         \midrule
 
-        1 & 00011000\&00011000 &  2\&2 & 16k\&32k & 2k\&8k &  40.711470   &  0.778093&   8.18 \\
-        2 & 00011000\&00011000 &  2\&2 & 16k\&32k & 4k\&4k &  40.334025   &  0.779408&   7.86 \\
-        %2 & 00011000\&00011000 &  2\&2 & 16k\&32k & 2k\&2k &  40232925 &   7.09  &  779773
-        3 & 00111100\&00111100 &  2\&2 & 16k\&32k & 4k\&4k &  42.445045   &  0.788404&   7.69 \\
-        %00111100\&00111100 &  2\&2 & 32k\&32k & 4k\&4k &  42504185 &   7.45  &  788776
-        4 & 01111110\&01111110 &  2\&2 & 16k\&32k & 4k\&4k &  44.585405   &  0.788884&   7.66 \\
-        %01111110\&01111110 &  2\&2 & 32k\&32k & 4k\&4k &  44636085 &   7.2 & 788886
-        5 & 0110\&0110  & 2\&2 & 16k\&32k & 2k\&2k  & 17.071595    & 0.804621&   3.01 \\
-        %01111110\&01111110  & 2\&2 &16k\&16k &4k\&4k &  44534185   & 8.31 &   1236457
-        6 & 11111111  &  2  & 32k &2k  & 23.697505  &   1.407281&  6.53 \\
-        7 & 0110:0110 &  2  & 16k& 2k & 23.321015  & 1.408495 &  7.90 \\
-        8 & 1111 &   2  & 32k &2k  & 10.467710    & 1.430374 & 2.44 \\
+        1 & 00011000 \& 00011000 &  2 \& 2 & 16 \& 32 & 2 \& 2 &  40.232925 &   0.779773  &  7.09 \\
+        2 & 00011000 \& 00011000 &  2 \& 2 & 16 \& 32 & 2 \& 8 &  40.711470   &  0.778093&   8.18 \\
+        3 & 00111100 \& 00111100 &  2 \& 2 & 16 \& 32 & 4 \& 4 &  42.445045   &  0.788404&   7.69 \\
+        %00111100 \& 00111100 &  2 \& 2 & 32 \& 32 & 4 \& 4 &  42504185 &   7.45  &  788776
+        4 & 01111110 \& 01111110 &  2 \& 2 & 16 \& 32 & 4 \& 4 &  44.585405   &  0.788884&   7.66 \\
+        %01111110 \& 01111110 &  2 \& 2 & 32 \& 32 & 4 \& 4 &  44636085 &   7.2 & 788886
+        5 & 0110 \& 0110  & 2 \& 2 & 16 \& 32 & 2 \& 2  & 17.071595    & 0.804621&   3.01 \\
+        %01111110 \& 01111110  & 2 \& 2 &16 \& 16 &4 \& 4 &  44534185   & 8.31 &   1236457
+        6 & 11111111  &  2  & 32 &2  & 23.697505  &   1.407281&  6.53 \\
+        7 & 0110:0110 &  2  & 16& 2 & 23.321015  & 1.408495 &  7.90 \\
+        8 & 1111 &   2  & 32 &2  & 10.467710    & 1.430374 & 2.44 \\
 
         \bottomrule
     \end{tabular}
@@ -149,8 +153,8 @@ For our balanced design, we selected the design specified in \cref{tab:balanced-
             \midrule
             Lane Configuration & {0110} & {0110} &\\
             Stop Bit & 2 & 2 & \\
-            I. Cache Size & 32 & 32 & \kilo\bit \\
-            D. Cache Size & 2 & 2 & \kilo\bit\\
+            I. Cache Size & 16 & 32 & \kibi\byte \\
+            D. Cache Size & 2 & 2 & \kibi\byte\\
             \bottomrule
         \end{tabular}
     \end{subtable}
@@ -173,9 +177,13 @@ For our balanced design, we selected the design specified in \cref{tab:balanced-
     \end{subtable}
 \end{table}
 
-In the \cref{tab:other-balanced-design-candidates} all candidates for the low power design are specified, it uses the same units as \cref{tab:balanced-design-parameters}.
+In the \cref{tab:other-balanced-design-candidates} all candidates for the balanced design are specified, it uses the same units as \cref{tab:balanced-design-parameters}.
 We ordered all designs by their Energy Cycles (as defined in \cref{ssec:soc-design-extra-custom-metrics}).
 This way we can order the designs on both Cycles and Energy at the same time.
+The balanced design dual core uses the same workload distribution as discussed in \cref{sub:highperf}, again with a larger instruction cache for the second core and $\rho$-VEX reconfigurability for power saving.
+The balanced design was chosen for the very low energy use but still good performance in execution cycles.
+The chosen design has a large area compared to the other candidates, but it was decided that this was not a problem considering a design with smaller area will be discussed in \cref{sub:lowpower}.
+
 
 \begin{table}[H]
     \centering
@@ -195,7 +203,8 @@ This way we can order the designs on both Cycles and Energy at the same time.
     \end{tabular}
 \end{table}
 
-\subsection{Low power}
+\subsection{Low power/area}
+\label{sub:lowpower}
 For our low power design, we selected the design specified in \cref{tab:low-power-design-parameters}.
 \begin{table}[H]
     \caption{Low power design}
@@ -209,8 +218,8 @@ For our low power design, we selected the design specified in \cref{tab:low-powe
             \midrule
             Lane Config & {01} &\\
             Stop Bit & 2 & \\
-            Instruction Cache Size & 16 & \kilo\bit \\
-            Data Cache Size & 2 & \kilo\bit \\
+            Instruction Cache Size & 16 & \kibi\byte \\
+            Data Cache Size & 2 & \kibi\byte \\
             \bottomrule
         \end{tabular}
     \end{subtable}
@@ -236,6 +245,10 @@ For our low power design, we selected the design specified in \cref{tab:low-powe
 In the \cref{tab:other-low-power-design-candidates} all candidates for the low power design are specified, it uses the same units as \cref{tab:low-power-design-parameters}.
 We ordered all designs by their Energy Area Cycles (as defined in \cref{ssec:soc-design-extra-custom-metrics}).
 This way we can order the designs on both Cycles, Area and Energy at the same time.
+The chosen design is significantly slower than the other designs discussed in this section.
+Unlike the balanced and high performance designs, this design is a single core so all benchmarks run sequentially.
+For the low power/area design, the design shown in \cref{tab:low-power-design-parameters} still ended up being chosen when execution cycles, power and area are equally taken into account for it's very low area and power usage. 
+
 \begin{table}[H]
     \centering
     \caption{Other low power design candidates (units same as in \cref{tab:low-power-design-parameters})}
