@@ -6,7 +6,7 @@ For example: a LUT might be used to implement a NAND operation, on an ASIC this 
 To gain insight into area utilization we quantified the area in terms of transistors for the following four elements: registers, LUTs, RAM blocks, and DSPs/multipliers. 
 
 The first element, registers, take up very little space. 
-The reason being that a register can only store one bit. Assuming a D-type flip flop is used, this can require as little as five transistors as shown by Praveen Kumar Chakravarti et al (2015) \cite{Chakravarti}.
+The reason being that a register can only store one bit. Assuming a D-type flip flop is used, this can require as little as five transistors as shown by Chakravarti and Mehra (2015) \cite{Chakravarti}.
 Betz (1998) \cite{betz} displays that a LUT consists of SRAM, multiplexers, input buffers, and complementers. 
 Based on these components a 4-LUTs is calculated to contain about \num{167} transistors. However the FPGA used, the Xilinx XC6VLX240T, mainly utilizes 6-LUTs as is found by observing the area.txt file. 
 Scaling the amount of transistors to a 6-LUT amounts to about 198 transistors. 
@@ -17,7 +17,7 @@ Since we think it's likely most logic ports don't go up to 10-input ports we ass
 Furthermore BRAM, which is very close to SRAM, is used on the FPGA. 
 A single SRAM cell requires six transistors  \cite{betz}, as the FPGA has \num{18} and \SI{36}{\kibi\byte} BRAM blocks, this would mean either about \num{108000} or \num{216000} transistors are required. 
 Lastly DSPs are a a bit harder to estimate area wise. 
-The user guide of the 7 Series Xilinx FGPA however reveals that the DSP has a \num{25} times \num{18} bit two's complement multiplier. 
+The user guide of the Xilinx FGPA however reveals that the DSP has a \num{25} times \num{18} bit two's complement multiplier. 
 This is of main concern for the ASIC as the DSPs are used by multipliers on the $\rho$-VEX processors. 
 A basic two's complement multiplier can be realized with full adders, AND gates, and NAND gates. 
 For a \num{25} times \num{18} bit multiplier this would require about \num{409} AND ports, \num{41} NAND ports, and \num{425} full adders. 
@@ -28,6 +28,7 @@ Depending on the DSP this might go in to the hundreds of thousands of transistor
 The energy consumption is directly related to the amount of transistors in use. 
 Fortunately because the area's are estimated in the amount of transistors, it can be said that the energy consumption is directly related to the amount of transistors. 
 The higher the amount of transistors, the higher the energy consumption.
+
 
 \subsection{Extra Custom Metrics}
 \label{ssec:soc-design-extra-custom-metrics}
