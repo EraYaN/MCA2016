@@ -66,6 +66,36 @@ This is the following equation. Thus the unit of this metric is: \si{\kilo\cycle
 \frac{Cycles}{10^3} \cdot \frac{Area}{10^9}
 \end{equation}
 
+\subsection{Cache Size}
+First we wanted to find the effect of the cache size.
+In \cref{tab:cache-size-variation-results} all the results are shown.
+These tests were done with a single context four lane, four multiplier configuration.
+From those numbers it is clear that any data cache size over \SI{2}{\kibibytes} is a good size.
+Only \SI{8}{\kibi\byte} make a big difference, but not worth it.
+The instruction cache size has a much bigger impact on the performance.
+Some of our benchmarks rely heavily on the instruction cache, as shown in \cref{sec:benchmark-analysis}. %TODO
+We see that \SI{32}{\kibi\byte} is by far the best candidate.
+
+\begin{table}[H]
+    \centering
+    \caption{Cache size variation results (units same as in \cref{tab:high-performance-design-parameters})}
+    \label{tab:cache-size-variation-results}
+    \begin{tabular}{lSSslSSSS}
+        \toprule
+        \textbf{Stop Bit} & \textbf{I.Ca.}& \textbf{D.Ca.} & & \textbf{Cycles ($10^6$)} & \textbf{I. Miss (\%)} & \textbf{DR. Miss (\%)} & \textbf{DW. Miss (\%)} \\
+        2 & 32 & 2 & \kibi\byte & 1.430374 &  1.14 & 1.46 & 1.53 \\
+        4 & 32 & 2 & \kibi\byte & 1.463118 &  1.94 & 1.46 & 1.55 \\
+        4 & 16 & 8 & \kibi\byte & 1.659030 &  4.14 & 0.24 & 0.74 \\
+        4 & 16 & 2 & \kibi\byte & 1.678799 &  4.14 & 1.46 & 1.55 \\
+        2 & 16 & 2 & \kibi\byte & 1.855233 &  5.33 & 1.46 & 1.53 \\
+        2 &  8 & 2 & \kibi\byte & 2.014009 &  6.85 & 1.46 & 1.53 \\
+        4 &  8 & 4 & \kibi\byte & 2.644193 & 14.02 & 1.37 & 1.43 \\
+        4 &  8 & 2 & \kibi\byte & 2.647964 & 14.02 & 1.46 & 1.55 \\
+        4 &  4 & 2 & \kibi\byte & 7.164679 & 60.88 & 1.46 & 1.56 \\
+        4 &  2 & 1 & \kibi\byte & 9.885138 & 88.84 & 2.27 & 2.33 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
 \subsection{High performance}
 \label{sub:highperf}
