@@ -1,16 +1,5 @@
 \section{SoC design}
-<<<<<<< HEAD
-\subsection{Area estimation & energy consumption}
-For a design with optimal area and energy characteristics it's important to be able to estimate how much space elements take up on an FPGA and ultimately an ASIC. Area wise there are some vital difference between an FPGA and an ASIC as an ASIC can directly implement functions whereas an FPGA has predefined blocks that might be utilized to implement a certain function but certainly isn't optimized. For example: a LUT might be used to implement a NAND operation, on an ASIC this would be implemented with a NAND gate which requires far fewer transistors than a LUT.\\\\
-To gain insight into area utilization we quantified the area in terms of transistors for the following four elements: registers, LUTs, RAM blocks, and DSPs/multipliers. The first element, registers, take up very little space. The reason being that a register can only store 1 bit. Assuming a D-type flip flop is used, five transistors are required. %\cite{Kumar Chakravarti}
-Betz (1998) displays that a LUT consists of SRAM, multiplexers, input buffers, and complementers. Based on these components a 4-LUTs is calculated to contain about 167 transistors. However the FPGA used, the Xilinx XC6VLX240T, mainly utilizes 6-LUTs as is found by observing the area.txt file. Scaling the amount of transistors to a 6-LUT amounts to about 198 transistors. In case a logic function has to be implemented, LUTs cause quite some overhead. Depending on the amount of inputs a logic port needs, the amount of transistors necessary to implement logic functions among the likes of NOR, NAND, and more can be range from about 2 to 22 transistors (assuming a maximum of 10 input logic ports). Since we think it's likely most logic ports don't go up to 10 input ports we assume an average of 4 input ports which leads to about 8 transistors on average per logic port on an ASIC.\\
-Furthermore BRAM, which is very close to SRAM, is used on the FPGA. A single SRAM cell requires six transistors  %\cite{Kumar Chakravarti}
-, as the FPGA has 18 and 36 KB BRAM blocks, this would mean either about 108.000 or 216.000 transistors are required. Lastly DSPs are a a bit harder to estimate area wise. %Reference{}
-however reveals that the DSP has a 25 times 18 bit two's complement multiplier. This is of main concern for the ASIC as the DSPs are used by multipliers on the $\rho$-VEX processors. A basic two's complement multiplier can be realized with full adders, AND gates, and NAND gates. For a 25 times 18 bit multiplier this would require about 409 AND ports, 41 NAND ports, and 425 full adders. A single full adder consists of 2 AND ports, 2 XOR ports and an OR gate. Subsequently the amount of transistors for a multiplier can be calculated to be about 12.818 transistors. As a DSP contains quite some more components than just a multiplier the amount of transistors is going to be a lot higher. Depending on the DSP this might go in to the hundreds of thousands of transistors.\\
-The energy consumption is directly related to the amount of transistors in use. Fortunately because the area's are estimated in the amount of transistors, it can be said that the energy consumption is directly related to the amount of transistors. The higher the amount of transistors, the higher the energy consumption.
-
-=======
-\subsection{Area estimation}
+\subsection{Area estimation \& energy consumption}
 For a design with optimal area and energy characteristics it's important to be able to estimate how much space elements take up on an FPGA and ultimately an ASIC.
 Area wise there are some vital difference between an FPGA and an ASIC as an ASIC can directly implement functions whereas an FPGA has predefined blocks that might be utilized to implement a certain function but certainly isn't optimized.
 For example: a LUT might be used to implement a NAND operation, on an ASIC this would be implemented with a NAND gate which requires far fewer transistors than a LUT.
@@ -18,27 +7,31 @@ For example: a LUT might be used to implement a NAND operation, on an ASIC this 
 
 To gain insight into area utilization we quantified the area in terms of transistors for the following four elements: registers, LUTs, RAM blocks, and DSPs/multipliers.
 The first element, registers, take up very little space.
-The reason being that a register can only store 1 bit.
+The reason being that a register can only store \num{1} bit.
 Assuming a D-type flip flop is used, five transistors are required \cite{Kumar Chakravarti}.
 Betz (1998) displays that a LUT consists of SRAM, multiplexers, input buffers, and complementers.
 Based on these components a 4-LUTs is calculated to contain about 167 transistors.
 However the FPGA used, the Xilinx XC6VLX240T, mainly utilizes 6-LUTs as is found by observing the area.txt file.
 Scaling the amount of transistors to a 6-LUT amounts to about 198 transistors.
 In case a logic function has to be implemented, LUTs cause quite some overhead.
-Depending on the amount of inputs a logic port needs, the amount of transistors necessary to implement logic functions among the likes of NOR, NAND, and more can be range from about 2 to 22 transistors (assuming a maximum of 10 input logic ports).
+Depending on the amount of inputs a logic port needs, the amount of transistors necessary to implement logic functions among the likes of NOR, NAND, and more can be range from about \numrange{2}{22} transistors (assuming a maximum of \num{10} input logic ports).
 Since we think it's likely most logic ports don't go up to 10 input ports we assume an average of 4 input ports which leads to about 8 transistors on average per logic port on an ASIC.
-\\
-Furthermore BRAM, which is very close to SRAM, is used on the FPGA.
-A single SRAM cell requires six transistors \cite{Kumar Chakravarti}, as the FPGA has 18 and 36 KB BRAM blocks, this would mean either about 108.
-000 or 216.
-000 transistors are required.
-Lastly DSPs are a a bit harder to estimate area wise.
-%TODO
-Reference{} however reveals that the DSP has a 25 times 18 bit two's complement adder.
-This is of main concern for the ASIC as the DSPs are used by multipliers on the $\rho$-VEX processors.
 
-%TODO
->>>>>>> origin/master
+
+Furthermore BRAM, which is very close to SRAM, is used on the FPGA.
+A single SRAM cell requires six transistors \cite{Kumar Chakravarti}, as the FPGA has \num{18} and \SI{36}{\kibi\byte} BRAM blocks, this would mean either about \num{108000} or \num{216000} transistors are required. Lastly DSPs are a a bit harder to estimate area wise.
+\cite{} however reveals that the DSP has a 25 times 18 bit two's complement multiplier.
+This is of main concern for the ASIC as the DSPs are used by multipliers on the $\rho$-VEX processors.
+A basic two's complement multiplier can be realized with full adders, AND gates, and NAND gates.
+For a 25 times 18 bit multiplier this would require about \num{409} AND ports, 41 NAND ports, and 425 full adders.
+A single full adder consists of \num{2} AND ports, \num{2} XOR ports and an OR gate.
+Subsequently the amount of transistors for a multiplier can be calculated to be about \num{12818} transistors.
+As a DSP contains quite some more components than just a multiplier the amount of transistors is going to be a lot higher.
+Depending on the DSP this might go in to the hundreds of thousands of transistors.
+
+The energy consumption is directly related to the amount of transistors in use.
+Fortunately because the area's are estimated in the amount of transistors, it can be said that the energy consumption is directly related to the amount of transistors.
+The higher the amount of transistors, the higher the energy consumption.
 
 %Reference: http://www.ijsret.org/pdf/EATHD-15044.pdf
 %Reference: https://booksonweb.files.wordpress.com/2011/11/digital-integrated-circuits-a-design-perspective-by-jan-m-rabaey.pdf
@@ -70,7 +63,7 @@ This is the following equation. Thus the unit of this metric is: \si{\kilo\cycle
 First we wanted to find the effect of the cache size.
 In \cref{tab:cache-size-variation-results} all the results are shown.
 These tests were done with a single context four lane, four multiplier configuration.
-From those numbers it is clear that any data cache size over \SI{2}{\kibibytes} is a good size.
+From those numbers it is clear that any data cache size over \SI{2}{\kibi\byte} is a good size.
 Only \SI{8}{\kibi\byte} make a big difference, but not worth it.
 The instruction cache size has a much bigger impact on the performance.
 Some of our benchmarks rely heavily on the instruction cache, as shown in \cref{sec:benchmark-analysis}. %TODO
