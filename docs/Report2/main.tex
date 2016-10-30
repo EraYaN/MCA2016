@@ -1,6 +1,5 @@
-%!TEX program=pdflatex
-\documentclass{article}
-\usepackage[utf8]{inputenc}
+%!TEX program=xelatex
+\documentclass[10pt]{article}
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{float}
@@ -8,6 +7,9 @@
 \usepackage{cleveref}
 \usepackage{booktabs}
 \usepackage{subcaption}
+\usepackage{fontspec}
+\usepackage{mathtools}
+\usepackage{unicode-math}
 \usepackage[
     detect-weight=true, 
     binary-units=true,
@@ -31,6 +33,9 @@ citestyle=numeric,
     abbreviate=false,
     date=iso8601
 ]{biblatex}
+\setmainfont{Minion Pro}[Ligatures={Common,TeX}]
+%\setmathfont{Asana-Math.otf}
+\setmonofont[Scale=0.9]{Lucida Console}
 \addbibresource{bibliography.bib}
 \begin{document}
 
