@@ -41,13 +41,13 @@ def ParseEnergyTxt(collection_dir, design):
 def GetListAverage(list_of_lists):
     num_lists = len(list_of_lists)
 
-    if num_lists >0:
+    if num_lists > 0:
         length = len(list_of_lists[0])
         average_list = [0] * length
 
         for sublist in list_of_lists:
             for ind in range(0,length):
-                average_list[ind] += sublist[ind]*(1/num_lists)
+                average_list[ind] += sublist[ind] * (1 / num_lists)
         return average_list
     else:
         return None
@@ -159,24 +159,25 @@ def GetRunLogMetrics(parsed):
         return ([],[])
     metrics = []
     for metric in runlog_metrics:
-        metrics.append(parsed['total'][runlog_metrics[metric]]-parsed['init'][runlog_metrics[metric]])
+        metrics.append(parsed['total'][runlog_metrics[metric]] - parsed['init'][runlog_metrics[metric]])
 
     extra_metrics = []
     #extras
-    total_imiss = float(parsed['total'][runlog_metrics['total_imiss']]-parsed['init'][runlog_metrics['total_imiss']])
-    total_iacc = float(parsed['total'][runlog_metrics['total_iacc']]-parsed['init'][runlog_metrics['total_iacc']])
-    imiss_percent = total_imiss/total_iacc*100
+    total_imiss = float(parsed['total'][runlog_metrics['total_imiss']] - parsed['init'][runlog_metrics['total_imiss']])
+    total_iacc = float(parsed['total'][runlog_metrics['total_iacc']] - parsed['init'][runlog_metrics['total_iacc']])
+    imiss_percent = total_imiss / total_iacc * 100
     extra_metrics.append(imiss_percent)
 
-    total_drmiss = float(parsed['total'][runlog_metrics['total_drmiss']]-parsed['init'][runlog_metrics['total_drmiss']])
-    total_dracc = float(parsed['total'][runlog_metrics['total_dracc']]-parsed['init'][runlog_metrics['total_dracc']])
-    drmiss_percent = total_drmiss/total_dracc*100
+    total_drmiss = float(parsed['total'][runlog_metrics['total_drmiss']] - parsed['init'][runlog_metrics['total_drmiss']])
+    total_dracc = float(parsed['total'][runlog_metrics['total_dracc']] - parsed['init'][runlog_metrics['total_dracc']])
+    drmiss_percent = total_drmiss / total_dracc * 100
     extra_metrics.append(drmiss_percent)
 
-    total_dwmiss = float(parsed['total'][runlog_metrics['total_dwmiss']]-parsed['init'][runlog_metrics['total_dwmiss']])
-    total_dwacc = float(parsed['total'][runlog_metrics['total_dwacc']]-parsed['init'][runlog_metrics['total_dwacc']])
-    dwmiss_percent = total_dwmiss/total_dwacc*100
+    total_dwmiss = float(parsed['total'][runlog_metrics['total_dwmiss']] - parsed['init'][runlog_metrics['total_dwmiss']])
+    total_dwacc = float(parsed['total'][runlog_metrics['total_dwacc']] - parsed['init'][runlog_metrics['total_dwacc']])
+    dwmiss_percent = total_dwmiss / total_dwacc * 100
     extra_metrics.append(dwmiss_percent)
+
     return (metrics,extra_metrics)
 
 def ProcessDesign(collection_dir,design):
@@ -207,10 +208,10 @@ def ProcessDesign(collection_dir,design):
             core = match.group(2)
             ctxt = match.group(3)
         else:
-            continue;
+            continue
 
         if ctxt is not None:
-            continue;
+            continue
 
         if core not in clean_runlogs:
             clean_runlogs[core] = []
@@ -232,7 +233,23 @@ def ProcessDesign(collection_dir,design):
     if '0' in clean_runlogs_extra:
         core0_extra_metrics = GetListAverage(clean_runlogs_extra['0'])
 
-    return [o[2:].replace('-',':') for o in design.split('_')] + [area_number,energy,performance,timing_passed] + [int(round(o)) for o in core0_metrics] + core0_extra_metrics
+    core1_metrics = []
+    core1_extra_metrics = []
+    if '1' in clean_runlogs:
+        core1_metrics = GetListAverage(clean_runlogs['1'])
+    if '1' in clean_runlogs_extra:
+        core1_extra_metrics = GetListAverage(clean_runlogs_extra['1'])
+
+    program_time = performance / 20e6 # 20MHz default clock; seconds
+    program_power = ((energy / 1000) / program_time) # watt
+    performance_per_second = performance / program_time # cycles per second
+    energyperformance = performance / 1e3 * (energy / 1000) # kilo performance times energy
+
+    energyperformancearea = performance / 1e3 * (energy / 1000) * area_number / 1e6 # kilo performance times energy time area
+
+    performancearea = performance / 1e3 * area_number / 1e9 # kilo performance time area
+
+    return [o[2:].replace('-',':') for o in design.split('_')] + [area_number,energy,performance,timing_passed,energyperformance,energyperformancearea,performancearea] + [int(round(o)) for o in core0_metrics] + core0_extra_metrics + [int(round(o)) for o in core1_metrics] + core1_extra_metrics
 
 
 def FindRunLogs(collection_dir,design):
@@ -287,15 +304,15 @@ if __name__ == '__main__':
             with open(os.path.join(collection_dir,'processed_results_excel.csv'), 'w', newline='') as csvfile_excel:
                 resultswriter = csv.writer(csvfile, delimiter=',')
                 resultswriter_excel = csv.writer(csvfile_excel, delimiter=';')
-                header = ['lane_config','stop_bit','icache_size','dcache_size','area_number','energy_mJ','performance_cycles','timing_passed'] + list(runlog_metrics.keys()) + extra_runlog_metrics
+                header = ['lane_config','stop_bit','icache_size','dcache_size','area_number','energy_mJ','cycles','timing_passed','energy_perf','energy_perf_area','perf_area'] + list(runlog_metrics.keys()) + extra_runlog_metrics + [ h + '1' for h in list(runlog_metrics.keys())] + [ h + '1' for h in extra_runlog_metrics]
                 resultswriter.writerow(header)
                 resultswriter_excel.writerow(header)
                 for result in results:
                     # Round values
-                    result=[format(x,".2f").replace('.',',') if isinstance(x, float) else x for x in result]
+                    result = [format(x,".2f").replace('.',',') if isinstance(x, float) else x for x in result]
                     resultswriter.writerow(result)
                     # Put comma for excel win
-                    result=[x.replace('.',',') if isinstance(x, str) else x for x in result]
+                    result = [x.replace('.',',') if isinstance(x, str) else x for x in result]
                     resultswriter_excel.writerow(result)
 
         print("Done. Run time is: {0} seconds".format((time.time() - t_launch)))

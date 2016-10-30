@@ -10,5 +10,82 @@ however reveals that the DSP has a 25 times 18 bit two's complement adder. This 
 %Reference: http://www.ijsret.org/pdf/EATHD-15044.pdf
 %Reference: https://booksonweb.files.wordpress.com/2011/11/digital-integrated-circuits-a-design-perspective-by-jan-m-rabaey.pdf
 \subsection{High performance}
-\subsection{Low power}
+
 \subsection{Balanced}
+%1111 2 32k 2k
+For our low power design, we selected the design specified in \cref{tab:balanced-design-parameters}.
+\begin{table}[H]
+    \caption{Balanced design}
+    \label{tab:balanced-design-parameters}
+    \begin{subtable}{.5\textwidth}
+        \centering
+        \caption{Balanced design parameters}
+        \begin{tabular}{lSs}
+            \toprule
+            \textbf{Parameter} & \multicolumn{2}{c}{\textbf{Value}}\\
+            \midrule
+            Lane Configuration & 1111 &\\
+            Stop Bit & 2 & \\
+            Instruction Cache Size & 32 & \kilo\bit \\
+            Data Cache Size & 2 & \kilo\bit \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+    \quad
+    \begin{subtable}{.5\textwidth}
+        \centering
+        \caption{Balanced design performance metrics}
+        \begin{tabular}{lSs}
+            \toprule
+            \textbf{Metric} & \multicolumn{2}{c}{\textbf{Value}}\\
+            \midrule
+            Area & 10.467710 & \mega \\
+            Cycles & 1430.374 & \kilo\cycles\\
+            Energy & 2.44 & \milli\joule\\
+            Energy Performance & 3.49 & \kilo\cycles\joule \\
+            Area Performance & 14.97 & \kilo\cycles\giga\transistors \\
+            Energy Area Performance & 36.53 & \kilo\cycles\joule\mega\transistors \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+\end{table}
+
+\subsection{Low power}
+%01 2   16k 2k
+For our low power design, we selected the design specified in \cref{tab:low-power-design-parameters}.
+\begin{table}[H]
+    \caption{Low power design}
+    \label{tab:low-power-design-parameters}
+    \begin{subtable}{.5\textwidth}
+        \centering
+        \caption{Low power design parameters}
+        \begin{tabular}{lSs}
+            \toprule
+            \textbf{Parameter} & \multicolumn{2}{c}{\textbf{Value}}\\
+            \midrule
+            Lane Configuration & 01 &\\
+            Stop Bit & 2 & \\
+            Instruction Cache Size & 16 & \kilo\bit \\
+            Data Cache Size & 2 & \kilo\bit \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+    \quad
+    \begin{subtable}{.5\textwidth}
+        \centering
+        \caption{Low power design performance metrics}
+        \begin{tabular}{lSs}
+            \toprule
+            \textbf{Metric} & \multicolumn{2}{c}{\textbf{Value}}\\
+            \midrule
+            Area & 5.088640 & \mega \\
+            Cycles & 1919.640 & \kilo\cycles\\
+            Energy & 2.71 & \milli\joule\\
+            Energy Performance & 5.20 & \kilo\cycles\joule \\
+            Area Performance & 9.77 & \kilo\cycles\giga\transistors \\
+            Energy Area Performance & 26.47 & \kilo\cycles\joule\mega\transistors \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+\end{table}
+
