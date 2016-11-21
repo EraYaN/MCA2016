@@ -391,59 +391,41 @@ Email: S.D.Cotofana@TUDelft.nl}
 
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
-\begin{abstract}
-The abstract should capture the essence of your report. While it has to be short and to the point the reader should be able to get a clear picture on the considered topic, the discussed ways to address it, and your main conclusion(s).
-\end{abstract}
+\input{abstract/abstract}
 
 
 \IEEEpeerreviewmaketitle
 
 
 
-\section{Introduction}
-
-\begin{itemize}
-\item Introduce the topic and its relevance to computer architecture.
-\item State the Research Question (RQ).
-\item Briefly describe the RQ solutions to be detailed in the report.
-\item State the main conclusions of your investigation.
-\item Report organisation (one paragraph).
-\end{itemize} 
+\input{introduction/introduction}
+%\begin{itemize}
+%\item Introduce the topic and its relevance to computer architecture.
+%\item State the Research Question (RQ).
+%\item Briefly describe the RQ solutions to be detailed in the report.
+%\item State the main conclusions of your investigation.
+%\item Report organisation (one paragraph).
+%\end{itemize} 
 
 
 \section{Description of the Evaluated Solutions}
+One paragraph about what you will discuss in this section. TODO
 
-One paragraph about what you will discuss in this section.
+\input{combined/combined}
+%Describe the main idea of the solution in [1] and the way it works. Use your own words and in case really needed you can include figures from the original paper while giving proper reference. The text has to be self contained as the reader should be able to understand the essence of the proposed approach without reading the original paper.
 
-\subsection{Solution 1}
+\input{neural/neural}
 
-Describe the main idea of the solution in~\cite{paper1} and the way it works. Use your own words and in case really needed you can include figures from the original paper while giving proper reference. The text has to be self contained as the reader should be able to understand the essence of the proposed approach without reading the original paper.
+\input{twolevel/twolevel}
 
-\subsection{Solution 2}
-
-Describe the main idea of the solution in~\cite{paper2} and the way it works. Use your own words and in case really needed you can include figures from the original paper while giving proper reference. The text has to be self contained as the reader should be able to understand the essence of the proposed approach without reading the original paper.
-
-\subsection{Solution 3}
-
-Describe the main idea of the solution in~\cite{paper3} and the way it works. Use your own words and in case really needed you can include figures from the original paper while giving proper reference. The text has to be self contained as the reader should be able to understand the essence of the proposed approach without reading the original paper.
-
-\subsection{Solution 4}
-
-Describe the main idea of the solution in~\cite{paper4} and the way it works. Use your own words and in case really needed you can include figures from the original paper while giving proper reference. The text has to be self contained as the reader should be able to understand the essence of the proposed approach without reading the original paper.
+\input{yags/yags}
  
-\subsection{Solution 5}
 
-Describe the main idea of the solution in~\cite{paper5} and the way it works. Use your own words and in case really needed you can include figures from the original paper while giving proper reference. The text has to be self contained as the reader should be able to understand the essence of the proposed approach without reading the original paper.
+\input{comparison/comparison}
+%Discuss in a critical way the analysed solutions. For each of them highlight pros and cons. Provide a qualitative (and in case possible also a quantitative) comparison of the discussed approaches. If applicable describe the way you would try to address the problem and explain why do you think your solution could give better results.
 
-\section{Comparison}
-
-Discuss in a critical way the analysed solutions. For each of them highlight pros and cons. Provide a qualitative (and in case possible also a quantitative) comparison of the discussed approaches.
-
-If applicable describe the way you would try to address the problem and explain why do you think your solution could give better results.
-
-\section{Conclusions}
-
-Summarise the report content and draw the conclusions of your investigation.
+\input{conclusion/conclusion}
+%Summarise the report content and draw the conclusions of your investigation.
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
