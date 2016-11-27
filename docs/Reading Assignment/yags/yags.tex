@@ -1,0 +1,17 @@
+\subsection{YAGS predictor}
+The last paper that will be discussed is "The YAGS Branch Prediction Scheme" by A. N. Eden and T. Mudge \cite{yags}.
+The YAGS predictor is a bi-modal predictor at it's core.
+It should combat aliasing between biased branches and their instances where they do not agree with their bias.
+And lastly it would be beneficial to reduce the amount of unnecessary information in the PHT.
+
+So if the bimodal predictor is used to store the branch bias, one only needs to store the instances of the branches when they do not agree with their bias in the direction PHTs.
+This reduces the size of the direction PHTs greatly.
+To keep track of those instances a 6 to 8 bit tag is added to the direction PHTs, these tags are based on the least significant bits of the branch address, and so almost all aliasing between two consecutive branches is eliminated.
+
+So when a branch occurs, and the choose PHT indicates a taken bias, the not taken cache is checked to see if there is a cache hit.
+If this is the case the cache provides the prediction, otherwise the choice PHT.
+The direction caches are updated if one of their predictions was used, and the choice PHT is updated like in a bimodal predictor.
+The last way the one of the direction caches is updated is if the choice PHT's supplied prediction turned out to be wrong, the cache of the correct result is updated, because the branch did not agree with it's bias there.
+
+A last improvement is to make the direction caches set-associative, to reduce the aliasing even further.
+A LRU (least recently used) replacement policy is used, with the exception that an entry in the taken cache indicating not taken will be replaced first to avoid unnecessary information, this information is already in the choice PHT and therefore redundant.
