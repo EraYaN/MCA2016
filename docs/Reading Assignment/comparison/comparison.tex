@@ -12,3 +12,11 @@ A second good metric is the size of each of the solutions and their relative per
 %TODO table to SPEC (Quantative)
 
 %TODO piece of text for size.
+
+
+% Erwin info:
+Combined:
+The branch predictor was benchmarked using SPEC 89, running the programs for 10 million instructions. For large predictor sizes (around 64 KB) the accuracy of the best performing predictor combination (local/gshare) approaches 98.1\%. This is better than either of the two alone. Of course, the predictor becomes less accurate once the array sizes are shrunk. A great advantage of the combined predictor is that it is very adaptable. There are a lot of combinations of predictors that could possibly be implemented and if resources are at a premium the predictor can easily be shrunk at the cost of performance.
+
+Two-level:
+The oldest branch predictor of this paper unsurprisingly does not have the best performance. On nine of the SPEC benchmarks it manages to attain an accuracy of 97\% with a 12 bit 512-entry 4-way associative history register table. Tuning the amount of bits in the history registers and entries in the history register table allows a designer to sacrifice performance for size.
