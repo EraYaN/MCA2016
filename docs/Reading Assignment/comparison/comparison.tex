@@ -3,7 +3,8 @@
 
 \section{Comparison}
 \subsection{Metrics}
-As a comparison metric the branch prediction accuracy is the most important specification. The accuracy of the different predictors is shown in tables \ref{tab:spec-accuracy-big} and \ref{tab:spec-accuracy-small}, note that some of these values were retrieved from a figure so there is a margin of error.
+As a comparison metric the branch prediction accuracy is the most important specification.
+The accuracy of the different predictors is shown in tables \ref{tab:spec-accuracy-big} and \ref{tab:spec-accuracy-small}, note that some of these values were retrieved from a figure so there is a margin of error.
 It should also be noted that SPEC benchmarks are updated over time and so some of the branch predictors are compared using different SPEC benchmarks.\\
 A second important metric we will discuss is the size of each of the solutions and their relative performance.
 
@@ -47,9 +48,9 @@ P_{N} = \frac{P - (min([P]) - M)}{(max([P]) + M)-(min([P]) - M)}
             {Two-level} & SPEC 89                   & 34\si{\kilo\byte} & 0.970 & 0.582191781 & 0.661453242 \\
             {Standard Neural} & SPEC 95 + 00 (int)  & 64\si{\kilo\byte} & 0.939 & 0.369863014 & 0.333333333 \\
             {Fast-path Neural} & SPEC 95 + 00 (int) & 64\si{\kilo\byte} & 0.942 & 0.390410959 & 0.342619746 \\
-            {gshare} & SPEC95                       & 38\si{\kilo\byte} & 0.935 & 0.342465753 & 0.426849137 \\
-            {bi-mode} & SPEC95                      & 35\si{\kilo\byte} & 0.940 & 0.376712329 & 0.477493832 \\
-            {YAGS} & SPEC95                         & 44\si{\kilo\byte} & 0.951 & 0.452054795 & 0.463343109 \\
+            {gshare} & SPEC 95                      & 38\si{\kilo\byte} & 0.935 & 0.342465753 & 0.426849137 \\
+            {bi-mode} & SPEC 95                     & 35\si{\kilo\byte} & 0.940 & 0.376712329 & 0.477493832 \\
+            {YAGS} & SPEC 95                        & 44\si{\kilo\byte} & 0.951 & 0.452054795 & 0.463343109 \\
         \bottomrule
     \end{tabular}
 \end{table*}
@@ -66,9 +67,9 @@ P_{N} = \frac{P - (min([P]) - M)}{(max([P]) + M)-(min([P]) - M)}
             {Two-level} & N/A                       &                    &       &             &            \\
             {Standard Neural} & SPEC 95 + 00 (int)  & 1.0\si{\kilo\byte} & 0.912 & 0.751381215 & 0.442748092\\
             {Fast-path Neural} & SPEC 95 + 00 (int) & 1.0\si{\kilo\byte} & 0.925 & 0.787292818 & 0.632315522\\
-            {gshare} & SPEC95                       & 0.5\si{\kilo\byte} & 0.690 & 0.138121547 & 0.333333333\\
-            {bi-mode} & SPEC95                      & 0.5\si{\kilo\byte} & 0.730 & 0.248618785 & 0.384223919\\
-            {YAGS} & SPEC95                         & 0.5\si{\kilo\byte} & 0.770 & 0.359116022 & 0.435114504\\
+            {gshare} & SPEC 95                      & 0.5\si{\kilo\byte} & 0.690 & 0.138121547 & 0.333333333\\
+            {bi-mode} & SPEC 95                     & 0.5\si{\kilo\byte} & 0.730 & 0.248618785 & 0.384223919\\
+            {YAGS} & SPEC 95                        & 0.5\si{\kilo\byte} & 0.770 & 0.359116022 & 0.435114504\\
         \bottomrule
     \end{tabular}
 \end{table*}
@@ -90,6 +91,16 @@ P_{N} = \frac{P - (min([P]) - M)}{(max([P]) + M)-(min([P]) - M)}
     \caption{Normalized Performance of the Small Predictors}
     \label{fig:performance-norm-small}
 \end{figure}
+
+The figures \ref{fig:performance-norm-big} and \ref{fig:performance-norm-small} show the Performance (Normalized) columns for the Tables \ref{tab:spec-accuracy-big} and \ref{tab:spec-accuracy-small} respectively.
+The graphs show a much cleared picture than the tables.
+Due to the pretty big influence of the size, the difference between the Combined and Two-level result is not that big.
+But the absolute difference of \SI{1.1}{\percent} is certainly significant.
+As stated earlier, the differences between the different version of SPEC could be the cause of the result disparity between the three data sources.
+The results for the bi-mode predictor from the paper by McFarling \cite{hybrid} with the value that is shown here, from the Eden and Mudge \cite{yags} paper, differ approximately \SI{-1}{\percent} in accuracy for the bigger sizes and \SI{20}{\percent} for the smaller sizes.
+So the smaller size predictor seems to suffer more from the context switching and the changes from SPEC 89 to SPEC 94.
+While the bigger one gains a little, although this might fall within the margin of error.
+The same numbers for the gshare predictors are \SI{3.3}{\percent} and \SI{26}{\percent} respectively.
 
 \subsubsection*{Combined}
 The combined branch predictor is benchmarked using SPEC 89, running the programs for 10 million instructions.
