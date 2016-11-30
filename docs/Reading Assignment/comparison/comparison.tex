@@ -61,14 +61,15 @@ A great advantage of the combined predictor is that it is very adaptable.
 There are a lot of combinations of predictors that could possibly be implemented and if resources are at a premium the predictor can easily be shrunk at the cost of performance.
 
 \subsubsection*{Two-level}
-The oldest branch predictor of this paper unsurprisingly does not have the best performance.
-On nine of the SPEC benchmarks it manages to attain an accuracy of 97\% with a 12 bit 512-entry 4-way associative history register table.
-Tuning the amount of bits in the history registers and entries in the history register table allows a designer to sacrifice performance for size.
+On nine of the SPEC benchmarks two-level adaptive training manages to attain an average accuracy of 97\% with a 12 bit 512-entry 4-way associative history register table with a pattern table comprised of saturating counters. 
+The size of the two-level predictor that is mentioned in the table is calculated as the addition of the size of the HRT (512 entries of 12 bits) and the PT ($2^12$ entries of 2 bits). 
+The data in Yeh and Patt's paper doesn't lend itself to a good comparison based on predictor size which is why the two-level entry in the small predictor table is left blank \cite{twolevel}. 
+Adjusting the amount of bits in the history registers and the amount of history registers in the HRT still do allow for a predictor that is very adjustable in size.
 
 \subsubsection*{Standard Neural, Fast-path Neural}
 These were simulated with all of the SPEC CPU 2000 integer benchmarks, and all of the SPEC CPU 95 integer benchmarks that are not duplicated in SPEC CPU 2000.
 
 \subsubsection*{gshare, bi-mode, YAGS}
 gshare, bi-mode, and YAGS predictors were simulated using all 8 SPEC95 benchmarks interleaved each 60 000 instructions to simulate a high context switch environment. This is probably also why the accuracy of these algorithms is so poor compared to the other paper's figures.
-YAGS performas much beterr when it is scaled down compared to the gshare and bi-mode predictors.
-This is because the YAGS prediction contains less unless information. (As described in \ref{ssec:yags})
+YAGS performs much better when it is scaled down compared to the gshare and bi-mode predictors.
+This is because the YAGS prediction contains less information. (As described in \ref{ssec:yags})
