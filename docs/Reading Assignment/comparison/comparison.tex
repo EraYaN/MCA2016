@@ -59,7 +59,7 @@ In nine of the SPEC benchmarks it manages to attain an accuracy of 97\% using a 
 >>>>>>> origin/master
 
 \subsubsection*{Standard Neural, Fast-path Neural}
-The neural predictors are mainly simulated with the SPEC CPU 2000 integer benchmark next to some SPEC 95 integer benchmarks that are not duplicated in SPEC 2000. From table \ref{tab:spec-accuracy-big} 
+The neural predictors are mainly simulated with the SPEC CPU 2000 integer benchmark next to some SPEC 95 integer benchmarks that are not duplicated in SPEC 2000. From table \ref{tab:spec-accuracy-big} it can be seen that the standard neural branch prediction and the fast-path neural branch prediction are not among the best. Looking at table \ref{tab:spec-accuracy-small} however, the predictors are now the second best options. In both cases is the fast-path based algorithm faster than the standard implementation. The parallelization of the algorithm proves to be beneficial. Decreasing the size has little influence on the prediction accuracy with about a difference of 2 percent point. Similarly however this means that increasing the size will not lead to much better accuracy. The fast-path based algorithm takes the path history into account but this influence levels off as the size increases.
 
 \subsubsection*{gshare, bi-mode, YAGS}
 gshare, bi-mode, and YAGS predictors were simulated using all 8 SPEC95 benchmarks interleaved each 60 000 instructions to simulate a high context switch environment.
