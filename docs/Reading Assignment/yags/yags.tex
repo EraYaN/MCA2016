@@ -3,7 +3,7 @@
 The third paper that will be discussed is "The YAGS Branch Prediction Scheme" by A. N. Eden and T. Mudge \cite{yags}.
 The YAGS predictor is a bimodal predictor at it's core.
 It should combat aliasing between biased branches and their instances where they do not agree with their bias.
-And lastly it would be beneficial to reduce the amount of unnecessary information in the PHT.
+And lastly it would be beneficial to reduce the amount of unnecessary information in the PHT (Pattern History Table).
 
 So if the bimodal predictor is used to store the branch bias, one only needs to store the instances of the branches when they do not agree with their bias in the direction PHTs.
 This reduces the size of the direction PHTs greatly.
