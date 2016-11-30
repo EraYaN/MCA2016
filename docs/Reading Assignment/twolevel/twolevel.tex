@@ -1,10 +1,46 @@
 \subsection{Two-level adaptive training}
-The first paper that will be discussed is Two-Level Adaptive Training Branch Prediction by Tse-Yu Yeh and Yale N. Patt \cite{twolevel}. This paper is the oldest of the four featured in this comparison paper, dating from 1991. The ideas put forth in this paper are however influential enough to be referred to by two of the other four papers and it is therefore definitely worth discussing. Two-level adaptive training is a local branch prediction scheme. The great benefit of local branch prediction is that it is able to remember the histories of multiple conditional branches separately. This means that the taken or not taken choices of one branch do not necessarily influence the predictions made for other branches in the code. The two-level adaptive training scheme accomplishes this by using two separate registers: the branch history register table (HRT) and the branch history pattern table (PT).
+The first paper that will be discussed is Two-Level Adaptive Training Branch Prediction by Tse-Yu Yeh and Yale N.
+Patt \cite{twolevel}.
+This paper is the oldest of the four featured in this comparison paper, dating from 1991.
+The ideas put forth in this paper are however influential enough to be referred to by two of the other four papers and it is therefore definitely worth discussing.
+Two-level adaptive training is a local branch prediction scheme.
+The great benefit of local branch prediction is that it is able to remember the histories of multiple conditional branches separately.
+This means that the taken or not taken choices of one branch do not necessarily influence the predictions made for other branches in the code.
+The two-level adaptive training scheme accomplishes this by using two separate registers: the branch history register table (HRT) and the branch history pattern table (PT).
 \subsubsection{Mechanism}
-Two-level adaptive training uses pattern repetition to predict the outcome of branches. The job of the HRT is to save the recent history of choices made in branches. Ideally every branch has its own register in the table but considering the amount of conditional branches that can be present in a program this is obviously not the case (which will be discussed later). When a branch is taken a '1' is shifted into the register and if a branch is not taken a '0' will be shifted in. The contents of the registers in the HRT are used to address the PT. In that table the actual prediction bits reside. In order to have separate prediction bits for every possible pattern, the PT will have to have $2^k$ entries where k is the amount of bits in the history registers in the HRT. The PT has multiple possible schemes it can use to produce predictions for the occurring patterns. A simple example would be a "last time" scheme where the pattern table simply saves the outcome of the most recent time this pattern occurred and predicts that the outcome will probably be the same this time. Yeh and Patt favour a saturating counter in their paper as it seemed to perform the best. This saturating counter is a simple two bit counter that increments whenever a branch is taken and decrements when a branch is not taken. Saturating means that it won't overflow or underflow past 3 or 0. The prediction of this saturating counter is then based on it's most significant bit, predicting taken if it is '1' and not taken if it is '0'. Using such a counter introduces a form inertia in the predictions, meaning that one wrong prediction won't immediately change the next prediction. Tables of these saturating counters are often called bimodal branch predictors.
+Two-level adaptive training uses pattern repetition to predict the outcome of branches.
+The job of the HRT is to save the recent history of choices made in branches.
+Ideally every branch has its own register in the table but considering the amount of conditional branches that can be present in a program this is obviously not the case (which will be discussed later).
+When a branch is taken a '1' is shifted into the register and if a branch is not taken a '0' will be shifted in.
+The contents of the registers in the HRT are used to address the PT.
+In that table the actual prediction bits reside.
+In order to have separate prediction bits for every possible pattern, the PT will have to have $2^k$ entries where k is the amount of bits in the history registers in the HRT.
+The PT has multiple possible schemes it can use to produce predictions for the occurring patterns.
+A simple example would be a "last time" scheme where the pattern table simply saves the outcome of the most recent time this pattern occurred and predicts that the outcome will probably be the same this time.
+Yeh and Patt favor a saturating counter in their paper as it seemed to perform the best.
+This saturating counter is a simple two bit counter that increments whenever a branch is taken and decrements when a branch is not taken.
+Saturating means that it won't overflow or underflow past 3 or 0.
+The prediction of this saturating counter is then based on it's most significant bit, predicting taken if it is '1' and not taken if it is '0'.
+Using such a counter introduces a form inertia in the predictions, meaning that one wrong prediction won't immediately change the next prediction.
+Tables of these saturating counters are often called bimodal branch predictors.
 \subsubsection{Possible problems}
-With a finite amount of resources two-level adaptive training inevitably runs into some limits. As mentioned before, having an HRT large enough to store a separate history for every single conditional branch in the program is infeasible. Yeh and Patt suggest two ways of making the two-level adaptive training work with smaller HRT's. The Associative History Register Table (AHRT) and the Hash History Register Table (HHRT). The AHRT is a simple set-associative cache where the lower part of a branch address is used to index the table and the higher part is used as a tag. A least recently used algorithm is used to determine what branch histories are saved. The AHRT comes with the extra cost of having to store the tag. The HHRT is a simple hash table so it has the benefit of not having to store the tag, but it has a slightly worse performance because collisions can occur in the table. This means that the histories of two different branches can interfere with each other.
+With a finite amount of resources two-level adaptive training inevitably runs into some limits.
+As mentioned before, having an HRT large enough to store a separate history for every single conditional branch in the program is infeasible.
+Yeh and Patt suggest two ways of making the two-level adaptive training work with smaller HRT's.
+The Associative History Register Table (AHRT) and the Hash History Register Table (HHRT).
+The AHRT is a simple set-associative cache where the lower part of a branch address is used to index the table and the higher part is used as a tag.
+A least recently used algorithm is used to determine what branch histories are saved.
+The AHRT comes with the extra cost of having to store the tag.
+The HHRT is a simple hash table so it has the benefit of not having to store the tag, but it has a slightly worse performance because collisions can occur in the table.
+This means that the histories of two different branches can interfere with each other.
 
-Another problem is that the two-level adaptive training scheme utilises only one PT. This means that if a certain pattern occurs in two different branches with a different outcome predictions will be flawed because the two patterns will address the same prediction bits in the PT. This interference effect can be reduced by saving a longer history of every branch.
+Another problem is that the two-level adaptive training scheme utilizes only one PT.
+This means that if a certain pattern occurs in two different branches with a different outcome predictions will be flawed because the two patterns will address the same prediction bits in the PT.
+This interference effect can be reduced by saving a longer history of every branch.
 
-Lastly, there are some possible problems with latency. Because making a prediction requires two sequential lookups in two different tables, the scheme is somewhat slow. In order to not have to wait for a prediction Yeh and Patt suggest already determining the next prediction whenever the history register is updated and storing it in the history register for that branch. This makes the prediction immediately available whenever the HRT is accessed. Issues can also occur when a new prediction in a branch is required before the last one has been confirmed to be correct or incorrect. Yeh and Patt suggest to just predict that the branch is taken in such cases as this mostly occurs in very tight loops with a high tendency to be taken.
+Lastly, there are some possible problems with latency.
+Because making a prediction requires two sequential lookups in two different tables, the scheme is somewhat slow.
+In order to not have to wait for a prediction Yeh and Patt suggest already determining the next prediction whenever the history register is updated and storing it in the history register for that branch.
+This makes the prediction immediately available whenever the HRT is accessed.
+Issues can also occur when a new prediction in a branch is required before the last one has been confirmed to be correct or incorrect.
+Yeh and Patt suggest to just predict that the branch is taken in such cases as this mostly occurs in very tight loops with a high tendency to be taken.

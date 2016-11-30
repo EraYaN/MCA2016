@@ -8,15 +8,65 @@ For all of the talked about solutions there are figures for SPEC benchmarks.
 
 A second good metric is the size of each of the solutions and their relative performance.
 \subsection{Results}
-
+The benchmarks were benchmarked using various version so the SPEC benchmarks.
+In the Tables \ref{tab:spec-accuracy-big} and \ref{tab:spec-accuracy-small}, the accuracy of the difference predictors is shown.
+Some of these values were retrieved from a figure so there is a margin of error.
 %TODO table to SPEC (Quantative)
+\begin{table}[H]
+    \centering
+    \caption{SPEC benchmarks accuracy result for big predictor sizes.}
+    \label{tab:spec-accuracy-big}
+    \begin{tabular}{llS[table-format=3.1,table-space-text-post=\si{\kilo\byte}]S[table-format=1.3]}
+    \toprule
+            {\textbf{Predictor}} & {\textbf{Benchmarks}} & {\textbf{Size ($\approx$)}} & {\textbf{Accuracy}} \\
+        \midrule
+            {Combined (local/gshare)} & SPEC 89 & 64\si{\kilo\byte} & 0.981 \\
+            {Two-level} & SPEC 89 & 14\si{\kilo\byte} & 0.97 \\
+            {Standard Neural} & SPEC 95 + 00 (int) & 64\si{\kilo\byte} & 0.939 \\
+            {Fast-path Neural} & SPEC 95 + 00 (int) & 64\si{\kilo\byte} & 0.942 \\
+            {gshare} & SPEC95 & 38\si{\kilo\byte}  & 0.945 \\
+            {bi-mode} & SPEC95 & 35\si{\kilo\byte}  & 0.950 \\
+            {YAGS} & SPEC95 & 48\si{\kilo\byte}  & 0.955 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
-%TODO piece of text for size.
+\begin{table}[H]
+    \centering
+    \caption{SPEC benchmarks accuracy result for small predictor sizes.}
+    \label{tab:spec-accuracy-small}
+    \begin{tabular}{llS[table-format=3.1,table-space-text-post=\si{\kilo\byte}]S[table-format=1.3]}
+        \toprule
+            {\textbf{Predictor}} & {\textbf{Benchmarks}} & {\textbf{Size ($\approx$)}} & {\textbf{Accuracy}} \\
+        \midrule
+            {Combined (local/gshare)} & SPEC 89 & 0.5\si{\kilo\byte} & 0.952 \\
+            {Two-level} & N/A & & \\
+            {Standard Neural} & SPEC 95 + 00 (int) & 1\si{\kilo\byte} & 0.912 \\
+            {Fast-path Neural} & SPEC 95 + 00 (int) & 1\si{\kilo\byte} & 0.925 \\
+            {gshare} & SPEC95 & 0.5\si{\kilo\byte} & 0.69 \\
+            {bi-mode} & SPEC95 & 0.5\si{\kilo\byte} & 0.73 \\
+            {YAGS} & SPEC95 & 0.5\si{\kilo\byte} & 0.77 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
+\subsubsection*{Combined}
+The branch predictor was benchmarked using SPEC 89, running the programs for 10 million instructions.
+For large predictor sizes (around 64 KB) the accuracy of the best performing predictor combination (local/gshare) approaches 98.1\%.
+This is better than either of the two alone.
+Of course, the predictor becomes less accurate once the array sizes are shrunk.
+A great advantage of the combined predictor is that it is very adaptable.
+There are a lot of combinations of predictors that could possibly be implemented and if resources are at a premium the predictor can easily be shrunk at the cost of performance.
 
-% Erwin info:
-Combined:
-The branch predictor was benchmarked using SPEC 89, running the programs for 10 million instructions. For large predictor sizes (around 64 KB) the accuracy of the best performing predictor combination (local/gshare) approaches 98.1\%. This is better than either of the two alone. Of course, the predictor becomes less accurate once the array sizes are shrunk. A great advantage of the combined predictor is that it is very adaptable. There are a lot of combinations of predictors that could possibly be implemented and if resources are at a premium the predictor can easily be shrunk at the cost of performance.
+\subsubsection*{Two-level}
+The oldest branch predictor of this paper unsurprisingly does not have the best performance.
+On nine of the SPEC benchmarks it manages to attain an accuracy of 97\% with a 12 bit 512-entry 4-way associative history register table.
+Tuning the amount of bits in the history registers and entries in the history register table allows a designer to sacrifice performance for size.
 
-Two-level:
-The oldest branch predictor of this paper unsurprisingly does not have the best performance. On nine of the SPEC benchmarks it manages to attain an accuracy of 97\% with a 12 bit 512-entry 4-way associative history register table. Tuning the amount of bits in the history registers and entries in the history register table allows a designer to sacrifice performance for size.
+\subsubsection*{Standard Neural, Fast-path Neural}
+These were simulated with all of the SPEC CPU 2000 integer benchmarks, and all of the SPEC CPU 95 integer benchmarks that are not duplicated in SPEC CPU 2000.
+
+\subsubsection*{gshare, bi-mode, YAGS}
+gshare, bi-mode, and YAGS predictors were simulated using all 8 SPEC95 benchmarks interleaved each 60 000 instructions to simulate a high context switch environment. This is probably also why the accuracy of these algorithms is so poor compared to the other paper's figures.
+YAGS performas much beterr when it is scaled down compared to the gshare and bi-mode predictors.
+This is because the YAGS prediction contains less unless information. (As described in \ref{ssec:yags})

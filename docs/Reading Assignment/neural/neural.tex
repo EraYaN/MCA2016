@@ -1,8 +1,31 @@
 \subsection{Neural Branch prediction}
 
-In 2003 Jiminez \cite{neural} proposed a modification of the standard neural branch predictors called \enqoute{Fast Path-Based Neural Branch Prediction}. The main reason for this modification is that a regular neural branch predictor has high latency. Jiminez managed to decrease this latency by spreading the work required for neural branch prediction over time. First a brief introduction to neural branch prediction is given after which the Fast Path-based version is described.\\
+In 2003 Jiminez \cite{neural} proposed a modification of the standard neural branch predictors called \enquote{Fast Path-Based Neural Branch Prediction}.
+The main reason for this modification is that a regular neural branch predictor has high latency.
+Jiminez managed to decrease this latency by spreading the work required for neural branch prediction over time.
+First a brief introduction to neural branch prediction is given after which the Fast Path-based version is described.\\
 
-Neural branch prediction makes use of perceptrons. A perceptron is based on a neuron which has dendrites to receive information, a cell body to process this information, and axon terminals to relay the output. A perceptron is highly similar in the sense that it has inputs, a processing stage, and an output. The inputs of a perceptron take in previous branch result that represent either taken or not taken. These branch results are stored in a history register. Every input of a perceptron is weighted, this way a potential correlation between inputs can be indicated.  When a branch prediction has to be made, the branch address is hashed to select a perceptron from a table. Subsequently the dot product of the input, the history register, and the corresponding integer weights of the perceptron is taken. This outputs a single integer that represents the output of the perceptron. A positive output indicates that the branch should be taken, while a negative output indicates the branch shouldn't be taken. The key to successful prediction is that the perceptrons are trained. Once the branch result is know the perceptron is confronted with its prediction from which it can learn. Subsequently the perceptron's weights are updated to improve the prediction.
+Neural branch prediction makes use of perceptrons.
+A perceptron is based on a neuron which has dendrites to receive information, a cell body to process this information, and axon terminals to relay the output.
+A perceptron is highly similar in the sense that it has inputs, a processing stage, and an output.
+The inputs of a perceptron take in previous branch result that represent either taken or not taken.
+These branch results are stored in a history register.
+Every input of a perceptron is weighted, this way a potential correlation between inputs can be indicated.
+ When a branch prediction has to be made, the branch address is hashed to select a perceptron from a table.
+Subsequently the dot product of the input, the history register, and the corresponding integer weights of the perceptron is taken.
+This outputs a single integer that represents the output of the perceptron.
+A positive output indicates that the branch should be taken, while a negative output indicates the branch shouldn't be taken.
+The key to successful prediction is that the perceptrons are trained.
+Once the branch result is know the perceptron is confronted with its prediction from which it can learn.
+Subsequently the perceptron's weights are updated to improve the prediction.
 
 \subsubsection{Fast Path-Based Neural Branch Prediction}
-The main problem with regular neural branch prediction is latency. Normally a perceptron is selected based on the hash of the branch address after which the output is calculated as the dot product of the weights and the history vector. A path-based algorithm works differently in that the weights are chosen along the path to the branch. Take for example a regular perceptron predictor with six weights that are used to predict branch $B_t$. Instead of taking the dot product of all the weights with the history register at once, five of the six weights are added to its corresponding value in the history register during the prediction of the previous branches $B_6$ until $B_1$. These additions are summed and during the prediction of branch $B_t$, the last weight and history register addition is performed and added to the sum. This method where the computation is spread out over time has lead to a 16\% higher IPC on a predictor with 64 KB hardware. Another positive effect is that this method increases accuracy as the path history is taken into account. Lastly the weights can be updated again according to the actual branch result.
+The main problem with regular neural branch prediction is latency.
+Normally a perceptron is selected based on the hash of the branch address after which the output is calculated as the dot product of the weights and the history vector.
+A path-based algorithm works differently in that the weights are chosen along the path to the branch.
+Take for example a regular perceptron predictor with six weights that are used to predict branch $B_t$.
+Instead of taking the dot product of all the weights with the history register at once, five of the six weights are added to its corresponding value in the history register during the prediction of the previous branches $B_6$ until $B_1$.
+These additions are summed and during the prediction of branch $B_t$, the last weight and history register addition is performed and added to the sum.
+This method where the computation is spread out over time has lead to a 16\% higher IPC on a predictor with 64 KB hardware.
+Another positive effect is that this method increases accuracy as the path history is taken into account.
+Lastly the weights can be updated again according to the actual branch result.
