@@ -10,7 +10,7 @@ The two-level adaptive training scheme accomplishes this by using two separate r
 \subsubsection{Mechanism}
 Two-level adaptive training uses pattern repetition to predict the outcome of branches.
 The purpose of the HRT is to save the recent history of decisions made in branches.
-Ideally every branch has its own register in the table but, considering the amount of conditional branches that can be present in a program this is obviously not the case as is discussed in section \ref{ssec:pp}.
+Ideally every branch has its own register in the table, but considering the amount of conditional branches that can be present in a program this is obviously not the case as is discussed in section \ref{ssec:pp}.
 When a branch is taken a '1' is shifted into the register while if a branch is not taken a '0' will be shifted in.
 The contents of the registers in the HRT are used to address the PT.
 In the latter table the actual prediction bits reside.
