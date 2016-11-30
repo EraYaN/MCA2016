@@ -1,14 +1,18 @@
 \section{Introduction}
 
 Any arbitrary computer program utilizes several conditional statements like the \textit{if-else} construction and \textit{for} or \textit{while} loops.
-These conditional statements can prove to be disruptive to the program flow as an instruction is usually fetched from the program counter, where after the next instruction is usually assumed to be at the next address.
-As current computer architectures employ pipelines, it is usually preferably to fetch the next instruction while the previous one is being executed.
+These conditional statements can prove to be disruptive to the program flow as an instruction is usually fetched from the program counter, after which the next instruction is usually assumed to be at the next address.
+As current computer architectures employ pipelines, it is preferable to fetch the next instruction while the previous one is being executed.
 However with conditional statements it's uncertain what the next instruction will be.
 In the case of an \textit{if-else} statement there are two possibilities, both which can only be evaluated once this statement is executed.
 Normally this would mean that the pipeline would have to stall and wait for the statement to be evaluated.
 Branch predictors try to minimize the delay caused by potential stalling due to conditional statements.
-There are various ways to accomplish this, four known methods are: the hybrid predictor, neural branch prediction, two-level adaptive training, and the YAGS branch prediction.
+There are various ways to accomplish this, four of those known methods are: the hybrid predictor, neural branch prediction, two-level adaptive training, and the YAGS branch prediction.
 These four methods will be described and analyzed after which a comparison will be drawn.
 With this comparison we would like to answer the following research question:
 \enquote{Which of the four proposed branch predictors provide the highest accuracy, while requiring the least amount of resources?}
-\todo[inline]{Main conclusion of investigation, perhaps separate paragraph for organization}
+
+In order to provide a good answer to this question the workings of each of the analysed branch predictors will first be explained. 
+After that the performance of each of the methods will be evaluated and compared with each other. 
+In the end it will be found that the hybrid predictor has the highest accuracy with it's paper claiming that 98.1\% of it's predictions are correct. 
+It should be noted though that the comparison has been made very difficult because of varying benchmarks and data collection methods between the different papers.

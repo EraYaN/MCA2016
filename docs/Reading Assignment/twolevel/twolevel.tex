@@ -10,7 +10,7 @@ The two-level adaptive training scheme accomplishes this by using two separate r
 \subsubsection{Mechanism}
 Two-level adaptive training uses pattern repetition to predict the outcome of branches.
 The purpose of the HRT is to save the recent history of decisions made in branches.
-Ideally every branch has its own register in the table but considering the amount of conditional branches that can be present in a program this is obviously not the case as is discussed further on in this paper. \todo[inline]{Vertel waar in de text en probeer obviously te veranderen}
+Ideally every branch has its own register in the table but, considering the amount of conditional branches that can be present in a program this is obviously not the case as is discussed in section \ref{ssec:pp}.
 When a branch is taken a '1' is shifted into the register while if a branch is not taken a '0' will be shifted in.
 The contents of the registers in the HRT are used to address the PT.
 In the latter table the actual prediction bits reside.
@@ -24,6 +24,7 @@ The prediction of this saturating counter is then based on its most significant 
 Using such a counter introduces a form inertia in the predictions, meaning that one wrong prediction won't immediately change the next prediction.
 Tables of these saturating counters are often called bimodal branch predictors.
 \subsubsection{Possible problems}
+\label{ssec:pp}
 With a finite amount of resources two-level adaptive training inevitably runs into some limits.
 As mentioned before, having an HRT large enough to store a separate history for every single conditional branch in the program is infeasible.
 Yeh and Patt suggest two ways of making the two-level adaptive training work with smaller HRT's.
@@ -43,5 +44,4 @@ Because making a prediction requires two sequential lookups in two different tab
 In order to avoid waiting for a prediction Yeh and Patt suggest already determining the next prediction whenever the history register is updated and storing it in the history register for that branch.
 This makes the prediction immediately available whenever the HRT is accessed.
 Issues can also occur when a new prediction in a branch is required before the last one has been confirmed to be correct or incorrect.
-\todo[inline]{Bedoel je prediction for a branch?}
 Yeh and Patt suggest to just predict that the branch is taken in such cases as this mostly occurs in very tight loops with a high tendency to be taken.
