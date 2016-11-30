@@ -5,11 +5,12 @@
 \subsection{Metrics}
 As a comparison metric the branch prediction accuracy is the most important specification. The accuracy of the different predictors is shown in tables \ref{tab:spec-accuracy-big} and \ref{tab:spec-accuracy-small}, note that some of these values were retrieved from a figure so there is a margin of error.
 It should also be noted that SPEC benchmarks are updated over time and so some of the branch predictors are compared using different SPEC benchmarks.\\
-A second important metric we will discuss is the size of each of the solutions and their relative performance.\\
+A second important metric we will discuss is the size of each of the solutions and their relative performance.
 
-Two other metrics we introduce are: ... \todo[inline]{Kun je nog iets meer info geven over performance en accuracy and waarom het belangrijk is?}
-Equation \ref{eq:accuracy-norm} is used to calculate the Normalized Accuracy ($A$).
-The accuracy needs to be normalized because the range is much smaller than a full \SIrange{0}{100}{\percent}.
+To help visualize which of these solutions performs best some derived metrics are introduced.
+Due to the different scale and impact of the two base metrics, we normalize and scale the numbers.
+Equation \ref{eq:accuracy-norm} is used to calculate the Normalized Accuracy ($A_N$) from the Accuracy ($A$).
+The accuracy needs to be normalized because the range is much smaller than a full \SIrange{0}{100}{\percent}and it should have a bigger effect of our performance metric.
 The margin ($M$) used was \SI{5}{\percent}.
 \begin{equation}
 \label{eq:accuracy-norm}
@@ -18,7 +19,8 @@ A_{N} = \frac{A - (min([A]) - M)}{(max([A]) + M)-(min([A]) - M)}
 
 Equation \ref{eq:performance} is used to calculate the Performance ($P$).
 Subsequently it's normalized as shown in Equation \ref{eq:performance-norm}.
-The margin used was the difference between the minimum and maximum value of the performance column. These margin are used to make sure that the values are closer to each other therefore the outliers don't distort the results too much.
+The margin used was the difference between the minimum and maximum value of the performance column.
+These margins are used to make sure that the values are closer to each other therefore the outliers don't distort the results too much.
 
 \begin{equation}
 \label{eq:performance}
@@ -37,8 +39,7 @@ P_{N} = \frac{P - (min([P]) - M)}{(max([P]) + M)-(min([P]) - M)}
     \centering
     \caption{SPEC benchmarks accuracy result for big predictor sizes.}
     \label{tab:spec-accuracy-big}
-    %S[table-format=3.1,table-space-text-post=\si{\kilo\byte}]S[table-format=1.3]S[table-format=1.3]S[table-format=1.3]
-    \begin{tabular}{llllll}
+    \begin{tabular}{llS[table-format=3.1,table-space-text-post=\si{\kilo\byte}]S[table-format=1.3]S[table-format=1.3]S[table-format=1.3]}
     \toprule
             {\textbf{Predictor}} & {\textbf{Benchmarks}} & {\textbf{Size ($\approx$)}} & {\textbf{Accuracy}} & {\textbf{Accuracy (Normalized)}} & {\textbf{Performance (Normalized)}}\\
         \midrule
@@ -105,7 +106,7 @@ The neural predictors are mainly simulated with the SPEC CPU 2000 integer benchm
 Decreasing the size has little influence on the prediction accuracy with about a difference of 2 percent point. Similarly however this means that increasing the size will not lead to much better accuracy. The fast-path based algorithm takes the path history into account but this influence levels off as the size increases.
 
 \subsubsection*{gshare, bi-mode, YAGS}
-gshare, bi-mode, and YAGS predictors were simulated using all 8 SPEC 95 benchmarks interleaved each 60 000 instructions to simulate a high context switch environment. \todo[inline]{Volgens mij klopt deze zin niet}
+gshare, bi-mode, and YAGS predictors were simulated using all 8 SPEC 95 benchmarks interleaved with each 60 000 instructions to simulate a high context switch environment.
 This might also be why the accuracy of these algorithms is relatively poor compared to the other paper's figures.
 
 YAGS performs much better when it is scaled down compared to the gshare and bi-mode predictors \cite{yags}.
