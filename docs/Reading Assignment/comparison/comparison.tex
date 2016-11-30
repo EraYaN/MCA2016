@@ -3,46 +3,75 @@
 
 \section{Comparison}
 \subsection{Metrics}
-As a comparison metric the branch prediction accuracy is the most important specification. This specification can be derived via the SPEC benchmark, which is displayed for every branch predictor in tables \ref{tab:spec-accuracy-big} and \ref{tab:spec-accuracy-small}. The accuracy of the difference predictors is shown, note that some of these values were retrieved from a figure so there is a margin of error. It should also be noted that SPEC benchmarks are updated over time and so some of the branch predictors are compared using different SPEC benchmarks.\\A second important metric we will discuss is the size of each of the solutions and their relative performance.
+As a comparison metric the branch prediction accuracy is the most important specification.
+This specification can be derived via the SPEC benchmark, which is displayed for every branch predictor in tables \ref{tab:spec-accuracy-big} and \ref{tab:spec-accuracy-small}.
+
+The equation used to calculate the Normalized Accuracy ($A$) is Equation \ref{eq:accuracy-norm}.
+The accuracy needs to be normalized because the range is much smaller than a full \SIrange{0}{100}{\percent}.
+The margin ($M$) used was \SI{5}{\percent}.
+\begin{equation}
+\label{eq:accuracy-norm}
+A_{N} = \frac{A - (min([A]) - M)}{(max([A]) + M)-(min([A]) - M)}
+\end{equation}
+
+The equation used to calculate the Performance ($P$) is Equation \ref{eq:performance}.
+It is them normalized using Equation \ref{eq:performance-norm}.
+The margin used was the difference between the min and max value of the Performance column.
+These margin are used to make sure that the values are closer to each other therefore the outliers would not distort the numbers to much.
+
+\begin{equation}
+\label{eq:performance}
+P = \frac{A_{N}}{Size}
+\end{equation}
+
+\begin{equation}
+\label{eq:performance-norm}
+P_{N} = \frac{P - (min([P]) - M)}{(max([P]) + M)-(min([P]) - M)}
+\end{equation}
+
+The accuracy of the different predictors is shown, note that some of these values were retrieved from a figure so there is a margin of error.
+It should also be noted that SPEC benchmarks are updated over time and so some of the branch predictors are compared using different SPEC benchmarks.\\
+A second important metric we will discuss is the size of each of the solutions and their relative performance.
 \subsection{Results}
 \label{ssec:results}
-\begin{table}[H]
+\begin{table*}[h]
     \centering
     \caption{SPEC benchmarks accuracy result for big predictor sizes.}
     \label{tab:spec-accuracy-big}
-    \begin{tabular}{llS[table-format=3.1,table-space-text-post=\si{\kilo\byte}]S[table-format=1.3]}
+    %S[table-format=3.1,table-space-text-post=\si{\kilo\byte}]S[table-format=1.3]S[table-format=1.3]S[table-format=1.3]
+    \begin{tabular}{llllll}
     \toprule
-            {\textbf{Predictor}} & {\textbf{Benchmarks}} & {\textbf{Size ($\approx$)}} & {\textbf{Accuracy}} \\
+            {\textbf{Predictor}} & {\textbf{Benchmarks}} & {\textbf{Size ($\approx$)}} & {\textbf{Accuracy}} & {\textbf{Accuracy (Normalized)}} & {\textbf{Performance (Normalized)}}\\
         \midrule
-            {Combined (local/gshare)} & SPEC 89 & 64\si{\kilo\byte} & 0.981 \\
-            {Two-level} & SPEC 89 & 14\si{\kilo\byte} & 0.97 \\
-            {Standard Neural} & SPEC 95 + 00 (int) & 64\si{\kilo\byte} & 0.939 \\
-            {Fast-path Neural} & SPEC 95 + 00 (int) & 64\si{\kilo\byte} & 0.942 \\
-            {gshare} & SPEC95 & 38\si{\kilo\byte}  & 0.945 \\
-            {bi-mode} & SPEC95 & 35\si{\kilo\byte}  & 0.950 \\
-            {YAGS} & SPEC95 & 48\si{\kilo\byte}  & 0.955 \\
+            {Combined (local/gshare)} & SPEC 89     & 38\si{\kilo\byte} & 0.981 & 0.657534247 & 0.666666667 \\
+            {Two-level} & SPEC 89                   & 34\si{\kilo\byte} & 0.970 & 0.582191781 & 0.661453242 \\
+            {Standard Neural} & SPEC 95 + 00 (int)  & 64\si{\kilo\byte} & 0.939 & 0.369863014 & 0.333333333 \\
+            {Fast-path Neural} & SPEC 95 + 00 (int) & 64\si{\kilo\byte} & 0.942 & 0.390410959 & 0.342619746 \\
+            {gshare} & SPEC95                       & 38\si{\kilo\byte} & 0.935 & 0.342465753 & 0.426849137 \\
+            {bi-mode} & SPEC95                      & 35\si{\kilo\byte} & 0.940 & 0.376712329 & 0.477493832 \\
+            {YAGS} & SPEC95                         & 44\si{\kilo\byte} & 0.951 & 0.452054795 & 0.463343109 \\
         \bottomrule
     \end{tabular}
-\end{table}
+\end{table*}
 
-\begin{table}[H]
+\begin{table*}[h]
     \centering
     \caption{SPEC benchmarks accuracy result for small predictor sizes.}
     \label{tab:spec-accuracy-small}
-    \begin{tabular}{llS[table-format=3.1,table-space-text-post=\si{\kilo\byte}]S[table-format=1.3]}
+    \begin{tabular}{llS[table-format=3.1,table-space-text-post=\si{\kilo\byte}]S[table-format=1.3]S[table-format=1.3]S[table-format=1.3]}
         \toprule
-            {\textbf{Predictor}} & {\textbf{Benchmarks}} & {\textbf{Size ($\approx$)}} & {\textbf{Accuracy}} \\
+            {\textbf{Predictor}} & {\textbf{Benchmarks}} & {\textbf{Size ($\approx$)}} & {\textbf{Accuracy}} & {\textbf{Accuracy (Normalized)}} & {\textbf{Performance (Normalized)}}\\
         \midrule
-            {Combined (local/gshare)} & SPEC 89 & 0.5\si{\kilo\byte} & 0.952 \\
-            {Two-level} & N/A & & \\
-            {Standard Neural} & SPEC 95 + 00 (int) & 1\si{\kilo\byte} & 0.912 \\
-            {Fast-path Neural} & SPEC 95 + 00 (int) & 1\si{\kilo\byte} & 0.925 \\
-            {gshare} & SPEC95 & 0.5\si{\kilo\byte} & 0.69 \\
-            {bi-mode} & SPEC95 & 0.5\si{\kilo\byte} & 0.73 \\
-            {YAGS} & SPEC95 & 0.5\si{\kilo\byte} & 0.77 \\
+            {Combined (local/gshare)} & SPEC 89     & 0.5\si{\kilo\byte} & 0.952 & 0.861878453 & 0.666666667\\
+            {Two-level} & N/A                       &                    &       &             &            \\
+            {Standard Neural} & SPEC 95 + 00 (int)  & 1.0\si{\kilo\byte} & 0.912 & 0.751381215 & 0.442748092\\
+            {Fast-path Neural} & SPEC 95 + 00 (int) & 1.0\si{\kilo\byte} & 0.925 & 0.787292818 & 0.632315522\\
+            {gshare} & SPEC95                       & 0.5\si{\kilo\byte} & 0.690 & 0.138121547 & 0.333333333\\
+            {bi-mode} & SPEC95                      & 0.5\si{\kilo\byte} & 0.730 & 0.248618785 & 0.384223919\\
+            {YAGS} & SPEC95                         & 0.5\si{\kilo\byte} & 0.770 & 0.359116022 & 0.435114504\\
         \bottomrule
     \end{tabular}
-\end{table}
+\end{table*}
 
 \subsubsection*{Combined}
 The combined branch predictor is benchmarked using SPEC 89, running the programs for 10 million instructions.
