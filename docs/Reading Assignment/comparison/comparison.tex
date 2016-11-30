@@ -55,8 +55,10 @@ In nine of the SPEC benchmarks it manages to attain an accuracy of 97\% using a 
 The neural predictors are mainly simulated with the SPEC CPU 2000 integer benchmark next to some SPEC 95 integer benchmarks that are not duplicated in SPEC 2000. From table \ref{tab:spec-accuracy-big} 
 
 \subsubsection*{gshare, bi-mode, YAGS}
-gshare, bi-mode, and YAGS predictors were simulated using all 8 SPEC95 benchmarks interleaved each 60 000 instructions to simulate a high context switch environment. This is probably also why the accuracy of these algorithms is so poor compared to the other paper's figures.
-YAGS performas much beterr when it is scaled down compared to the gshare and bi-mode predictors.
-This is because the YAGS prediction contains less unless information. (As described in \ref{ssec:yags})
+gshare, bi-mode, and YAGS predictors were simulated using all 8 SPEC95 benchmarks interleaved each 60 000 instructions to simulate a high context switch environment.
+This is probably also why the accuracy of these algorithms is so poor compared to the other paper's figures.
+YAGS performs much beter when it is scaled down compared to the gshare and bi-mode predictors.
+This is because the YAGS prediction contains less useless information. (As described in \ref{ssec:yags})
+So you can get the same performance with less resources.
 
 %\todo[inline]{Waar is tw}
