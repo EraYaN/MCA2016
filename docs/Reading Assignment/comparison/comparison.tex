@@ -73,6 +73,24 @@ A second important metric we will discuss is the size of each of the solutions a
     \end{tabular}
 \end{table*}
 
+\begin{figure}[H]
+    \centering
+    \setlength{\figurewidth}{0.7\columnwidth}
+    \setlength{\figureheight}{0.45\columnwidth}
+    \subimport{resources/}{norm-perf-big-predictors.tikz}
+    \caption{Normalized Performance of the Big Predictors}
+    \label{fig:performance-norm-big}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \setlength{\figurewidth}{0.7\columnwidth}
+    \setlength{\figureheight}{0.45\columnwidth}
+    \subimport{resources/}{norm-perf-small-predictors.tikz}
+    \caption{Normalized Performance of the Small Predictors}
+    \label{fig:performance-norm-small}
+\end{figure}
+
 \subsubsection*{Combined}
 The combined branch predictor is benchmarked using SPEC 89, running the programs for 10 million instructions.
 For large predictor sizes, around 64 KB, table \ref{tab:spec-accuracy-big} shows that the accuracy of the best performing predictor combination appears to be two-level/gshare as it approaches 98.1\%. This is better than either of the two alone. Decreasing the size of the predictor leads to less accuracy as shown in table \ref{tab:spec-accuracy-small}. However the combined predictor still has the best prediction accuracy. A great advantage of the combined predictor is that it's very adaptable. There are a lot of combinations of predictors that could possibly be implemented and if resources are at a premium, the predictor can easily be shrunk at the cost of performance.
