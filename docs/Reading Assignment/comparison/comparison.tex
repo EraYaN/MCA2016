@@ -3,10 +3,12 @@
 
 \section{Comparison}
 \subsection{Metrics}
-As a comparison metric the branch prediction accuracy is the most important specification.
-This specification can be derived via the SPEC benchmark, which is displayed for every branch predictor in tables \ref{tab:spec-accuracy-big} and \ref{tab:spec-accuracy-small}.
+As a comparison metric the branch prediction accuracy is the most important specification. The accuracy of the different predictors is shown in tables \ref{tab:spec-accuracy-big} and \ref{tab:spec-accuracy-small}, note that some of these values were retrieved from a figure so there is a margin of error.
+It should also be noted that SPEC benchmarks are updated over time and so some of the branch predictors are compared using different SPEC benchmarks.\\
+A second important metric we will discuss is the size of each of the solutions and their relative performance.\\
 
-The equation used to calculate the Normalized Accuracy ($A$) is Equation \ref{eq:accuracy-norm}.
+Two other metrics we introduce are: ... \todo[inline]{Kun je nog iets meer info geven over performance en accuracy and waarom het belangrijk is?}
+Equation \ref{eq:accuracy-norm} is used to calculate the Normalized Accuracy ($A$).
 The accuracy needs to be normalized because the range is much smaller than a full \SIrange{0}{100}{\percent}.
 The margin ($M$) used was \SI{5}{\percent}.
 \begin{equation}
@@ -14,10 +16,9 @@ The margin ($M$) used was \SI{5}{\percent}.
 A_{N} = \frac{A - (min([A]) - M)}{(max([A]) + M)-(min([A]) - M)}
 \end{equation}
 
-The equation used to calculate the Performance ($P$) is Equation \ref{eq:performance}.
-It is them normalized using Equation \ref{eq:performance-norm}.
-The margin used was the difference between the min and max value of the Performance column.
-These margin are used to make sure that the values are closer to each other therefore the outliers would not distort the numbers to much.
+Equation \ref{eq:performance} is used to calculate the Performance ($P$).
+Subsequently it's normalized as shown in Equation \ref{eq:performance-norm}.
+The margin used was the difference between the minimum and maximum value of the performance column. These margin are used to make sure that the values are closer to each other therefore the outliers don't distort the results too much.
 
 \begin{equation}
 \label{eq:performance}
@@ -29,9 +30,7 @@ P = \frac{A_{N}}{Size}
 P_{N} = \frac{P - (min([P]) - M)}{(max([P]) + M)-(min([P]) - M)}
 \end{equation}
 
-The accuracy of the different predictors is shown, note that some of these values were retrieved from a figure so there is a margin of error.
-It should also be noted that SPEC benchmarks are updated over time and so some of the branch predictors are compared using different SPEC benchmarks.\\
-A second important metric we will discuss is the size of each of the solutions and their relative performance.
+
 \subsection{Results}
 \label{ssec:results}
 \begin{table*}[h]
@@ -78,24 +77,24 @@ The combined branch predictor is benchmarked using SPEC 89, running the programs
 For large predictor sizes, around 64 KB, table \ref{tab:spec-accuracy-big} shows that the accuracy of the best performing predictor combination appears to be two-level/gshare as it approaches 98.1\%. This is better than either of the two alone. Decreasing the size of the predictor leads to less accuracy as shown in table \ref{tab:spec-accuracy-small}. However the combined predictor still has the best prediction accuracy. A great advantage of the combined predictor is that it's very adaptable. There are a lot of combinations of predictors that could possibly be implemented and if resources are at a premium, the predictor can easily be shrunk at the cost of performance.
 
 \subsubsection*{Two-level}
-On nine of the SPEC benchmarks two-level adaptive training manages to attain an average accuracy of 97\% with a 12 bit 512-entry 4-way associative history register table with a pattern table comprised of saturating counters. 
+In nine of the SPEC benchmarks, two-level adaptive training manages to attain an average accuracy of 97\% with a 12 bit 512-entry 4-way associative history register table with also a pattern table comprised of saturating counters. 
 The size of the two-level predictor that is mentioned in the table is calculated as the addition of the size of the HRT (512 entries of 12 bits) and the PT ($2^{12}$ entries of 2 bits). 
-The data in Yeh and Patt's paper doesn't lend itself to a good comparison based on predictor size which is why the two-level entry in the small predictor table is left blank \cite{twolevel}. 
+The data in Yeh and Patt's paper does not provide a clear comparison based on predictor size which is why the two-level entry in the small predictor table is left blank \cite{twolevel}. 
 Adjusting the amount of bits in the history registers and the amount of history registers in the HRT still do allow for a predictor that is very adjustable in size.
 
-
 \subsubsection*{Standard Neural, Fast-path Neural}
-The neural predictors are mainly simulated with the SPEC CPU 2000 integer benchmark next to some SPEC 95 integer benchmarks that are not duplicated in SPEC 2000. From table \ref{tab:spec-accuracy-big} it can be seen that the standard neural branch prediction and the fast-path neural branch prediction are not among the best. Looking at table \ref{tab:spec-accuracy-small} however, the predictors are now the second best options. In both cases is the fast-path based algorithm faster than the standard implementation. The parallelization of the algorithm proves to be beneficial. Decreasing the size has little influence on the prediction accuracy with about a difference of 2 percent point. Similarly however this means that increasing the size will not lead to much better accuracy. The fast-path based algorithm takes the path history into account but this influence levels off as the size increases.
+The neural predictors are mainly simulated with the SPEC CPU 2000 integer benchmark next to some SPEC 95 integer benchmarks that are not duplicated in SPEC 2000. From table \ref{tab:spec-accuracy-big} it can be seen that the standard neural branch prediction and the fast-path neural branch prediction are not among the best. Looking at table \ref{tab:spec-accuracy-small} however, the predictors are now the second best options. In both cases is the fast-path based algorithm faster than the standard implementation. The parallelization of the algorithm proves to be beneficial. \\
+Decreasing the size has little influence on the prediction accuracy with about a difference of 2 percent point. Similarly however this means that increasing the size will not lead to much better accuracy. The fast-path based algorithm takes the path history into account but this influence levels off as the size increases.
 
 \subsubsection*{gshare, bi-mode, YAGS}
-gshare, bi-mode, and YAGS predictors were simulated using all 8 SPEC 95 benchmarks interleaved each 60 000 instructions to simulate a high context switch environment.
-This is probably also why the accuracy of these algorithms is so poor compared to the other paper's figures.
+gshare, bi-mode, and YAGS predictors were simulated using all 8 SPEC 95 benchmarks interleaved each 60 000 instructions to simulate a high context switch environment. \todo[inline]{Volgens mij klopt deze zin niet}
+This might also be why the accuracy of these algorithms is relatively poor compared to the other paper's figures.
 
 YAGS performs much better when it is scaled down compared to the gshare and bi-mode predictors \cite{yags}.
-This is because the YAGS prediction contains less useless information in it's tables, as described in subsection \ref{ssec:yags}.
-So you can get the same performance with less resources.
+This is because the YAGS prediction contains less useless information in its tables, as described in subsection \ref{ssec:yags}.
+This way one can get the same performance with less resources.
 
 Eden and Mudge believe that they have not shown the full potential of this predictor scheme.
 Due to the relatively small size of the direction caches, the history register is also quite small, hence the predictor has reduced correlation information.
 A proposed improvement is to add those lost history bits as tags.
-This can be done for all the predictors in the paper, but they stated that the overhead would be much smaller for the YAGS prediction scheme \cite{yags}. 
+This can be done for all the predictors in the paper, but it appears that the overhead would be much smaller for the YAGS prediction scheme \cite{yags}. 
