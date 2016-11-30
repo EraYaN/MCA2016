@@ -5,6 +5,7 @@
 \subsection{Metrics}
 As a comparison metric the branch prediction accuracy is the most important specification. This specification can be derived via the SPEC benchmark, which is displayed for every branch predictor in tables \ref{tab:spec-accuracy-big} and \ref{tab:spec-accuracy-small}. The accuracy of the difference predictors is shown, note that some of these values were retrieved from a figure so there is a margin of error. It should also be noted that SPEC benchmarks are updated over time and so some of the branch predictors are compared using different SPEC benchmarks.\\A second important metric we will discuss is the size of each of the solutions and their relative performance.
 \subsection{Results}
+\label{ssec:results}
 \begin{table}[H]
     \centering
     \caption{SPEC benchmarks accuracy result for big predictor sizes.}
@@ -48,15 +49,11 @@ The combined branch predictor is benchmarked using SPEC 89, running the programs
 For large predictor sizes, around 64 KB, table \ref{tab:spec-accuracy-big} shows that the accuracy of the best performing predictor combination appears to be two-level/gshare as it approaches 98.1\%. This is better than either of the two alone. Decreasing the size of the predictor leads to less accuracy as shown in table \ref{tab:spec-accuracy-small}. However the combined predictor still has the best prediction accuracy. A great advantage of the combined predictor is that it's very adaptable. There are a lot of combinations of predictors that could possibly be implemented and if resources are at a premium, the predictor can easily be shrunk at the cost of performance.
 
 \subsubsection*{Two-level}
-<<<<<<< HEAD
 On nine of the SPEC benchmarks two-level adaptive training manages to attain an average accuracy of 97\% with a 12 bit 512-entry 4-way associative history register table with a pattern table comprised of saturating counters. 
-The size of the two-level predictor that is mentioned in the table is calculated as the addition of the size of the HRT (512 entries of 12 bits) and the PT ($2^12$ entries of 2 bits). 
+The size of the two-level predictor that is mentioned in the table is calculated as the addition of the size of the HRT (512 entries of 12 bits) and the PT ($2^{12}$ entries of 2 bits). 
 The data in Yeh and Patt's paper doesn't lend itself to a good comparison based on predictor size which is why the two-level entry in the small predictor table is left blank \cite{twolevel}. 
 Adjusting the amount of bits in the history registers and the amount of history registers in the HRT still do allow for a predictor that is very adjustable in size.
-=======
-The oldest branch predictor of this paper unsurprisingly does not have the best performance.
-In nine of the SPEC benchmarks it manages to attain an accuracy of 97\% using a 12 bit 512-entry 4-way associative history register table. Tuning the amount of bits in the history registers and entries in the history register table allows a designer to sacrifice performance for size.
->>>>>>> origin/master
+
 
 \subsubsection*{Standard Neural, Fast-path Neural}
 The neural predictors are mainly simulated with the SPEC CPU 2000 integer benchmark next to some SPEC 95 integer benchmarks that are not duplicated in SPEC 2000. From table \ref{tab:spec-accuracy-big} it can be seen that the standard neural branch prediction and the fast-path neural branch prediction are not among the best. Looking at table \ref{tab:spec-accuracy-small} however, the predictors are now the second best options. In both cases is the fast-path based algorithm faster than the standard implementation. The parallelization of the algorithm proves to be beneficial. Decreasing the size has little influence on the prediction accuracy with about a difference of 2 percent point. Similarly however this means that increasing the size will not lead to much better accuracy. The fast-path based algorithm takes the path history into account but this influence levels off as the size increases.
